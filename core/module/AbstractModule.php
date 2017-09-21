@@ -73,6 +73,26 @@ abstract class AbstractModule
 	}
 
 	/**
+	 * Преобразует объект в строку подставляя его свойства в шаблон и возвращает сгенерированный шаблон
+	 *
+	 * @return string
+	 */
+	final public function __toString()
+	{
+		$this->preRender();
+
+		return $this->view->render($this->getTemplateFile(), $this->getProperties(), true);
+	}
+
+	/**
+	 * Действия перед преобразованием у разных модулей могут быть разные или не быть
+	 */
+	protected function preRender()
+	{
+		return;
+	}
+
+	/**
 	 * Добавляет свойство объекту
 	 *
 	 * @param string $propertyName имя свойства

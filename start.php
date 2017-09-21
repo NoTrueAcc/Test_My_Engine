@@ -3,10 +3,9 @@
 	error_reporting(E_ALL);
 	ini_set('display_errors', 1);
 
-	set_include_path(get_include_path() . PATH_SEPARATOR . 'core' . PATH_SEPARATOR . 'library' . PATH_SEPARATOR . 'objects' . PATH_SEPARATOR . 'validator' . PATH_SEPARATOR . 'controllers' . PATH_SEPARATOR . 'modules');
-	spl_autoload_extensions('.php');
-	spl_autoload_register();
-	
+	require_once 'autoloader/Autoloader.php';
+	\autoloader\Autoloader::register();
+
 	define('MAINMENU', 1);
 	define('TOPMENU', 2);
 	define('KB_B', 1024);

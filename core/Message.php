@@ -24,7 +24,7 @@ class Message
 	 * Message constructor.
 	 * @param string $file путь к файлу с сообщениями
 	 */
-	private function __construct($file)
+	public function __construct($file)
 	{
 		$this->data = parse_ini_file($file);
 	}

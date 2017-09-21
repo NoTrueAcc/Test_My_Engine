@@ -1,0 +1,56 @@
+<div class="main">
+    <h2 class="h1">Свежие статьи:</h2>
+
+    <?php foreach($articles as $article) { ?>
+        <section>
+            <div class="state_img">
+                <img src="<?=$article->img?>" alt="<?=$article->title?>">
+                <div>
+                    <img class="date_img" src="images/date.png" alt="">
+                    <div class="date_text"><?=$article->dayShow?> <br> <?=$article->monthShow?></div>
+                </div>
+            </div>
+            <h2><?=$article->title?></h2>
+            <?=$article->intro?>
+            <div class="clear"></div>
+            <a class="more" href="<?=$article->link?>">Прочитать</a>
+            <div class="clear"></div>
+        </section>
+        <div class="article_info">
+            <ul>
+                <li>
+                    <img src="images/icon_user.png" alt="">
+                </li>
+                <li>Alex_R</li>
+                <li><?=$article->countComments?> <?=$article->countCommentsText?></li>
+
+                <?php if($article->section) : ?>
+                <li>
+                    <a href="<?=$article->section->link?>"><?=$article->section->title?></a>
+                </li>
+                <?php endif; ?>
+
+                <?php if($article->category) : ?>
+                <li>
+                    <a href="<?=$article->category->link?>"><?=$article->category->title?></a>
+                </li>
+                <?php endif; ?>
+
+            </ul>
+        </div>
+    <?php } ?>
+    <div class="clear"></div>
+    <?php if ($moreArticles) { ?>
+        <hr />
+        <h3>Ещё статьи...</h3>
+        <ul>
+            <?php foreach ($moreArticles as $article) { ?>
+                <li>
+                    <a href="<?=$article->link?>"><?=$article->title?></a>
+                </li>
+            <?php } ?>
+        </ul>
+    <?php } else { ?>
+        <?=$pagination?>
+    <?php } ?>
+</div>

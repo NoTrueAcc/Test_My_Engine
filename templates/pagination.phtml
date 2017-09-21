@@ -1,0 +1,27 @@
+<div class="paginator">
+    <?php if($active != 1) : ?>
+
+    <a href="<?=$url?>" title="Первая">Первая</a>
+    <a href="<?=($active == 2) ? $url : $urlPage . ($active - 1)?>" title="Предыдущая">Предыдущая</a>
+    <?php else : ?>
+    <span>Первая</span>
+    <span>Предыдущая</span>
+    <?php endif; ?>
+
+    <?php for($i = $startPage; $i < $endPage; $i++) { ?>
+        <?php if($i == $active) : ?>
+            <span><?=$i?></span>
+        <?php else : ?>
+            <a href="<?=($i == 1) ? $url : ($urlPage . $i)?>"><?=$i?></a>
+        <?php endif; ?>
+    <?php } ?>
+
+    <?php if($active != $endPage) : ?>
+        <a href="<?=$urlPage . ($active + 1)?>" title="Следующая">Следующая</a>
+        <a href="<?=$urlPage . $endPage?>" title="Последняя">Последняя</a>
+    <?php else : ?>
+        <span>Следующая</span>
+        <span>Последняя</span>
+    <?php endif; ?>
+
+</div>

@@ -53,7 +53,7 @@ abstract class AbstractSelectDB
 			for($i = 0; $i < count($fields); $i++)
 			{
 				// Если передана функция добавляем апострафы ее переменной
-				$from .= strpos($fields[$i], '(') ? preg_replace('/\((.*)?\)/i', '(`$1`),', $fields[$i]) : $fields[$i];
+				$from .= strpos($fields[$i], '(') ? preg_replace('/\((.*)?\)/i', '(`$1`),', $fields[$i]) : $fields[$i] . ',';
 			}
 
 			$from = $this->db->removeLastSymbol($from);
@@ -94,7 +94,7 @@ abstract class AbstractSelectDB
 
 		for ($i = 0; $i < count($params); $i++)
 		{
-			$where .= "'" . $this->db->getSQ() . "',";
+			$where .= $this->db->getSQ() . ",";
 		}
 
 		$where = $this->db->removeLastSymbol($where);
@@ -116,7 +116,7 @@ abstract class AbstractSelectDB
 
 		for($i = 0; $i < count($fields); $i++)
 		{
-			$order .= "`" . $fields[$i] . "`" . ($asc ? ',' : ' DESC,');
+			$order .= "`" . $fields[$i] . "`" . ($asc[$i] ? ',' : ' DESC,');
 		}
 
 		$this->order = $this->db->removeLastSymbol($order);
@@ -153,7 +153,7 @@ abstract class AbstractSelectDB
 			return $this;
 		}
 
-		$this->limit = " LIMIT $limit $offset";
+		$this->limit = " LIMIT $limit OFFSET $offset";
 
 		return $this;
 	}
@@ -163,13 +163,13 @@ abstract class AbstractSelectDB
 	 *
 	 * @return string строка запроса select
 	 */
-	public function toString()
+	public function __toString()
 	{
 		$where = isset($this->where) ? $this->where : '';
 		$order = isset($this->order) ? $this->order : '';
 		$limit = isset($this->limit) ? $this->limit : '';
 
-		return isset($this->from) ? 'SELECT' . $this->from . $where . $order . $limit : '';
+		return isset($this->from) ? 'SELECT ' . $this->from . $where . $order . $limit : '';
 	}
 
 	/**

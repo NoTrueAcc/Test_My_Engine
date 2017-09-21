@@ -21,7 +21,7 @@ class Config
 	const DB_USER 		= 'root';
 	const DB_PASSWORD 	= 'root';
 	const DB_NAME 		= 'my_engine';
-	const DB_PREFIX 	= 'xyz';
+	const DB_PREFIX 	= 'xyz_';
 	const DB_SYM_QUERY  = '?';
 
 	const DIR_IMG       = '/images/';

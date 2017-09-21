@@ -37,11 +37,11 @@ class AbstractObjectDB
 	private $formatDate = '';
 	private $id = null;
 	private $properties = array();
-	protected $table = '';
+	protected static $table = '';
 
 	public function __construct($table, $formatDate)
 	{
-		$this->table = $table;
+		self::$table = $table;
 		$this->formatDate = $formatDate;
 	}
 
@@ -71,7 +71,7 @@ class AbstractObjectDB
 		}
 
 		$select = new SelectDB();
-		$select->from($this->table, $this->getSelectFields())
+		$select->from(self::$table, $this->getSelectFields())
 			->where("`id` = " . self::$db->getSQ(), array($id));
 
 		if(!($propertiesData = self::$db->selectRow($select)))
@@ -152,7 +152,7 @@ class AbstractObjectDB
 		{
 			if($action == self::ACTION_UPDATE)
 			{
-				$success = self::$db->update($this->table, $propertiesData, '`id` = ' . self::$db->getSQ(), array($this->getId()));
+				$success = self::$db->update(self::$table, $propertiesData, '`id` = ' . self::$db->getSQ(), array($this->getId()));
 
 				if(!$success)
 				{
@@ -163,7 +163,7 @@ class AbstractObjectDB
 			}
 			elseif ($action == self::ACTION_INSERT)
 			{
-				$success = self::$db->insert($this->table, $propertiesData);
+				$success = self::$db->insert(self::$table, $propertiesData);
 
 				if(!$success)
 				{
@@ -194,7 +194,7 @@ class AbstractObjectDB
 			return false;
 		}
 
-		$success = self::$db->delete($this->table, '`id` = ' . self::$db->getSQ(), array($this->getId()));
+		$success = self::$db->delete(self::$table, '`id` = ' . self::$db->getSQ(), array($this->getId()));
 
 		if(!$success)
 		{
@@ -336,7 +336,7 @@ class AbstractObjectDB
 	 * @param string $property свойство
 	 * @param string $value значение
 	 */
-	public function setProperty($property, $value)
+	public function __set($property, $value)
 	{
 		$this->properties[$property]['value'] = $value;
 	}
@@ -347,7 +347,7 @@ class AbstractObjectDB
 	 * @param string $property свойство
 	 * @return int|null
 	 */
-	public function getProperty($property)
+	public function __get($property)
 	{
 		if($property == 'id')
 		{
@@ -577,7 +577,7 @@ class AbstractObjectDB
 		$value = is_array($value) ? $value : array($value);
 
 		$select = new SelectDB();
-		$select->from($this->table, array('*'))
+		$select->from(self::$table, array('*'))
 			->where("`$field` = " . self::$db->getSQ(), $value);
 
 		if(($data = self::$db->selectRow($select)))

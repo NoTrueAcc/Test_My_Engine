@@ -1,0 +1,9 @@
+<nav>
+    <ul id="topmenu">
+        <?php foreach ($items as $item) { ?>
+            <li>
+            <a <?=($item->link == $uri) ? "class='active'" : ''?> <?=$item->external ? 'rel="external"' : ""?> href="<?=$item->link?>"><?=$item->title?></a>
+            </li>
+        <?php } ?>
+    </ul>
+</nav>

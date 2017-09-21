@@ -70,38 +70,12 @@ abstract class AbstractDataBase
 	}
 
 	/**
-	 * Возвращает сформированный запрос
-	 *
-	 * @param string $query запрос
-	 * @param array $params массив параметров для подстановки в запрос
-	 * @return string $query сформированный запрос
-	 */
-	public function getQuery($query, array $params)
-	{
-		if(count($params))
-		{
-			$sqLen = mb_strlen($this->sq);
-			$offset = 0;
-
-			foreach ($params as $param)
-			{
-				$sqPos = strpos($query, $this->sq, $offset);
-				$arg = is_null($param) ? 'NULL' : "'" . $this->mysqli->real_escape_string($param) . "'";
-				$query = substr_replace($query, $arg, $sqPos, $sqLen);
-				$offset = $sqPos + mb_strlen($arg);
-			}
-		}
-
-		return $query;
-	}
-
-	/**
 	 * Выполняет запрос селект к БД и возвращает результат в виде массива
 	 *
-	 * @param Select $select объект запроса
+	 * @param SelectDB $select объект запроса
 	 * @return bool|array результат в виде ассоциативного массива
 	 */
-	public function select(Select $select)
+	public function select(SelectDB $select)
 	{
 		if(!($result = $this->getResult($select, true, true)))
 		{
@@ -121,10 +95,10 @@ abstract class AbstractDataBase
 	/**
 	 * Выполняет запрос селект к БД и возвращает одну строку в виде массива
 	 *
-	 * @param Select $select объект запроса к БД
+	 * @param SelectDB $select объект запроса к БД
 	 * @return bool|array результат запроса в виде массива
 	 */
-	public function selectRow(Select $select)
+	public function selectRow(SelectDB $select)
 	{
 		if(!($result = $this->getResult($select, true, true)))
 		{
@@ -137,10 +111,10 @@ abstract class AbstractDataBase
 	/**
 	 * Выполняет запрос селект к БД и возвращает столбец в виде массива
 	 *
-	 * @param Select $select объект запроса к БД
+	 * @param SelectDB $select объект запроса к БД
 	 * @return bool|array результат запроса в виде массива
 	 */
-	public function selectCol(Select $select)
+	public function selectCol(SelectDB $select)
 	{
 		if(!($result = $this->getResult($select, true, true)))
 		{
@@ -163,10 +137,10 @@ abstract class AbstractDataBase
 	/**
 	 * Выполняет запрос селект к БД и возвращает значение ячейки
 	 *
-	 * @param Select $select объект запроса
+	 * @param SelectDB $select объект запроса
 	 * @return string результат запроса в виде строки
 	 */
-	public function selectCell(Select $select)
+	public function selectCell(SelectDB $select)
 	{
 		if(!($result = $this->getResult($select, true, true)))
 		{
@@ -175,7 +149,7 @@ abstract class AbstractDataBase
 
 		$result = $result->fetch_assoc();
 
-		return $result[0];
+		return array_shift($result);
 	}
 
 	/**
@@ -255,6 +229,32 @@ abstract class AbstractDataBase
 	}
 
 	/**
+	 * Возвращает сформированный запрос
+	 *
+	 * @param string $query запрос
+	 * @param array $params массив параметров для подстановки в запрос
+	 * @return string $query сформированный запрос
+	 */
+	public function getQuery($query, array $params)
+	{
+		if(count($params))
+		{
+			$sqLen = mb_strlen($this->sq);
+			$offset = 0;
+
+			foreach ($params as $param)
+			{
+				$sqPos = strpos($query, $this->sq, $offset);
+				$arg = is_null($param) ? 'NULL' : "'" . $this->mysqli->real_escape_string($param) . "'";
+				$query = substr_replace($query, $arg, $sqPos, $sqLen);
+				$offset = $sqPos + mb_strlen($arg);
+			}
+		}
+
+		return $query;
+	}
+
+	/**
 	 * Отправляет запрос к БД
 	 *
 	 * @param string $query запрос
@@ -274,14 +274,14 @@ abstract class AbstractDataBase
 	/**
 	 * Выполняет запрос к БД и возвращает результат
 	 *
-	 * @param Select $select объект запроса
+	 * @param SelectDB $select объект запроса
 	 * @param bool $zero может ли вернуть 0 строк
 	 * @param bool $one может ли вернуть 1 строку
 	 * @return bool|\mysqli_result результат запроса
 	 */
-	private function getResult(Select $select, $zero, $one)
+	private function getResult(SelectDB $select, $zero, $one)
 	{
-		if(!($result = $this->query($select->toString())) || (!$zero && ($result->num_rows == 0)) || (!$one && ($result->num_rows == 1)))
+		if(!($result = $this->mysqli->query($select)) || (!$zero && ($result->num_rows == 0)) || (!$one && ($result->num_rows == 1)))
 		{
 			return false;
 		}

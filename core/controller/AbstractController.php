@@ -13,7 +13,7 @@ use core\FormProcessor;
 use core\Message;
 use core\Request;
 use core\View;
-use library\JsValidator;
+use library\JavaScriptValidator;
 
 /**
  * Класс контроллер
@@ -39,7 +39,7 @@ abstract class AbstractController
 		$this->view = $view;
 		$this->request = new Request();
 		$this->formProcessor = new FormProcessor($this->request, $message);
-		$this->jsValidator = new JsValidator($message);
+		$this->jsValidator = new JavaScriptValidator($message);
 		$this->authUser = $this->authUser();
 
 		if(!$this->access())
@@ -49,7 +49,7 @@ abstract class AbstractController
 		}
 	}
 
-	abstract protected function render($str);
+	abstract protected function render($center);
 	abstract protected function accessDenied();
 	abstract protected function action404();
 

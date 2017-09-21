@@ -25,7 +25,6 @@ class Route
 		$controllerName = $controllerAndAction[0] . 'Controller';
 		$actionName = 'action' . $controllerAndAction[1];
 
-		print_r($controllerAndAction);
 		try
 		{
 			if(class_exists($controllerName))

@@ -1,0 +1,15 @@
+<head>
+    <title><?=$title?></title>
+    <?php foreach ($meta as $metaTag) { ?>
+        <meta <?=$metaTag->httpEquiv ? 'http-equiv' : 'name'?>='<?=$metaTag->name?>' content='<?=$metaTag->content?>'>
+    <?php } ?>
+    <?php if($favicon) : ?>
+    <link href="<?=$favicon?>" rel="shortcut icon" type="image/x-icon">
+    <?php endif; ?>
+    <?php foreach ($css as $href) { ?>
+        <link rel="stylesheet" type="text/css" href="<?=$href?>">
+    <?php } ?>
+    <?php foreach ($js as $src) { ?>
+        <script type="text/javascript" src="<?=$src?>"></script>
+    <?php } ?>
+</head>
