@@ -20,7 +20,7 @@ use library\config\Config;
  */
 class ObjectDB extends AbstractObjectDB
 {
-	private $months = array('янв', 'фев', 'март', 'апр', 'май', 'июнь', 'июль', 'авг', 'сент', 'окт', 'ноя', 'дек');
+	private static $months = array('янв', 'фев', 'март', 'апр', 'май', 'июнь', 'июль', 'авг', 'сент', 'окт', 'ноя', 'дек');
 
 	public function __construct($table)
 	{
@@ -33,10 +33,10 @@ class ObjectDB extends AbstractObjectDB
 	 * @param bool string|int $date дата
 	 * @return mixed
 	 */
-	public function getMonth($date = false)
+	public static function getMonth($date = false)
 	{
 		$date = $date ? $date : time();
 
-		return $this->months[date('n', $date) - 1];
+		return self::$months[date('n', $date) - 1];
 	}
 }

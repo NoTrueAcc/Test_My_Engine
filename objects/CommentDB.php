@@ -13,6 +13,12 @@ use core\Url;
 use library\database\ObjectDB;
 use library\database\SelectDB;
 
+/**
+ * Класс для раблоты с таблицей comments
+ *
+ * Class CommentDB
+ * @package objects
+ */
 class CommentDB extends ObjectDB
 {
 	protected static $table = 'comments';
@@ -28,7 +34,13 @@ class CommentDB extends ObjectDB
 		$this->addProperty('date', 'ValidateDate', self::TYPE_TIMESTAMP, $this->getDate());
 	}
 
-	public function getAllOnArticleId($articleId)
+	/**
+	 * Возвращает все записи в виде объектов по айди артикула
+	 *
+	 * @param string|int $articleId айди артикула
+	 * @return array
+	 */
+	public static function getAllOnArticleId($articleId)
 	{
 		$select = new SelectDB();
 		$select->from(self::$table, array('*'))
@@ -41,7 +53,13 @@ class CommentDB extends ObjectDB
 		return $comments;
 	}
 
-	public function getCountOnArticleId($articleId)
+	/**
+	 * Возвращает количество записей по айди артикула
+	 *
+	 * @param string|int $articleId айди артикула
+	 * @return string
+	 */
+	public static function getCountOnArticleId($articleId)
 	{
 		$select = new SelectDB();
 		$select->from(self::$table, array('COUNT(id)'))
@@ -50,6 +68,9 @@ class CommentDB extends ObjectDB
 		return self::$db->selectCell($select);
 	}
 
+	/**
+	 * Формирует ссылку на комментарии
+	 */
 	protected function postInit()
 	{
 		$this->link = Url::getUrl('article', '', array('id', $this->articleId));

@@ -6,8 +6,8 @@
 	require_once 'autoloader/Autoloader.php';
 	\autoloader\Autoloader::register();
 
-	define('MAINMENU', 1);
-	define('TOPMENU', 2);
+	define('MAIN_MENU', 1);
+	define('TOP_MENU', 2);
 	define('KB_B', 1024);
 	define('PAY_COURSE', 1);
 	define('FREE_COURSE', 2);

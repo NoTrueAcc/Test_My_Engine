@@ -56,12 +56,12 @@ class AbstractObjectDB
 	}
 
 	/**
-	 * Загружает свойства объекта по id и инициализирует их в объекте
+	 * Загружает свойства объекта по id и инициализирует объект
 	 *
 	 * @param int $id идентификатор
 	 * @return bool
 	 */
-	public function load($id)
+	public function loadOnId($id)
 	{
 		$id = (int) $id;
 
@@ -97,7 +97,7 @@ class AbstractObjectDB
 		{
 			$value = isset($propertiesData[$property]) ? $propertiesData[$property] : null;
 
-			switch ($propertiesData['type'])
+			switch ($data['type'])
 			{
 				case self::TYPE_TIMESTAMP :
 					$value = is_null($value) ? null : strftime($value);
@@ -477,7 +477,7 @@ class AbstractObjectDB
 	 * @param string|int $value значение
 	 * @return string количество строк
 	 */
-	protected function getCountOnField($table, $field, $value)
+	protected static function getCountOnField($table, $field, $value)
 	{
 		$value = is_array($value) ? $value : array($value);
 
@@ -488,9 +488,9 @@ class AbstractObjectDB
 	 * Добавляет новые свойства объектам по связывающему полю id
 	 *
 	 * @param $objectsDataList
-	 * @param Object $class
-	 * @param $fieldOut
-	 * @param $fieldIn
+	 * @param string $class
+	 * @param string $fieldOut
+	 * @param string $fieldIn
 	 * @return array
 	 */
 	protected static function addSubObject($objectsDataList, $class, $fieldOut, $fieldId)
@@ -542,7 +542,7 @@ class AbstractObjectDB
 	 * Получаем значение свойства. Может быть большая вложенность.
 	 *
 	 * @param $objectData
-	 * @param $fieldIn
+	 * @param string $fieldIn
 	 * @return mixed
 	 */
 	protected static function getComplexValue($objectData, $fieldIn)

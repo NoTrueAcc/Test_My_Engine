@@ -36,11 +36,13 @@ abstract class AbstractSelectDB
 	 * Добавляет свойство from объекту Select
 	 *
 	 * @param string $table название таблицы
-	 * @param array $fields массив полей для получения
+	 * @param array|string $fields массив полей для получения
 	 * @return AbstractSelectDB $this объект класса Select
 	 */
-	public function from($table, array $fields)
+	public function from($table, $fields)
 	{
+		$params = is_array($fields) ? $fields : array($fields);
+
 		$tableName = $this->db->getTableName($table);
 		$from = '';
 
@@ -69,12 +71,14 @@ abstract class AbstractSelectDB
 	 * Добавляет свойство where объекту Select
 	 *
 	 * @param string $where условие
-	 * @param array $params массив параметров для подстановки в условие
+	 * @param array|string $params массив параметров для подстановки в условие
 	 * @param string $logic логическое объединение условий, может принимать значения И|ИЛИ, по умолчанию 'И'
 	 * @return AbstractSelectDB $this объект класса Select
 	 */
-	public function where($where, array $params = array(), $logic = 'AND')
+	public function where($where, $params = '', $logic = 'AND')
 	{
+		$params = is_array($params) ? $params : array($params);
+
 		$where = $this->db->getQuery($where, $params);
 
 		return $this->setWhere($where, $logic);
@@ -84,12 +88,14 @@ abstract class AbstractSelectDB
 	 * Добавляет свойство whereIn объекту Select
 	 *
 	 * @param string $field поле
-	 * @param array $params массив параметров для подстановки
+	 * @param array|string $params массив параметров для подстановки
 	 * @param string $logic логическое объединение условий, может принимать значения И|ИЛИ, по умолчанию 'И'
 	 * @return AbstractSelectDB $this объект класса Select
 	 */
-	public function whereIn($field, array $params, $logic = 'AND')
+	public function whereIn($field, $params, $logic = 'AND')
 	{
+		$params = is_array($params) ? $params : array($params);
+
 		$where = "`$field` IN (";
 
 		for ($i = 0; $i < count($params); $i++)
@@ -103,15 +109,25 @@ abstract class AbstractSelectDB
 		return $this->where($where, $params, $logic);
 	}
 
+	public function whereFieldInSet($field, $value, $logic = 'AND')
+	{
+		$where = 'FIELD_IN_SET(' . $this->db->getSQ() . "', `$field`) > 0";
+
+		return $this->where($where, array($value), $logic);
+	}
+
 	/**
 	 * Добавляет свойство order объекту Select
 	 *
-	 * @param array $fields массив полей сортировки
-	 * @param array $asc массив типов сортировки
+	 * @param array|string $fields массив полей сортировки
+	 * @param array|string $asc массив типов сортировки
 	 * @return AbstractSelectDB $this объект класса Select
 	 */
-	public function order(array $fields, array $asc = array(true))
+	public function order($fields, $asc = true)
 	{
+		$asc = is_array($asc) ? $asc : array($asc);
+		$fields = is_array($fields) ? $fields : array($fields);
+
 		$order = ' ORDER BY ';
 
 		for($i = 0; $i < count($fields); $i++)
