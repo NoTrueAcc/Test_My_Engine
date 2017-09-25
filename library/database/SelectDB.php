@@ -9,7 +9,7 @@
 namespace library\database;
 
 
-use core\database\AbstractSelectDB;
+use core\database\SelectDB as CoreSelectDB;
 
 /**
  * Класс для работы с объектами типа Select
@@ -17,7 +17,7 @@ use core\database\AbstractSelectDB;
  * Class SelectDB
  * @package library\database
  */
-class SelectDB extends AbstractSelectDB
+class SelectDB extends CoreSelectDB
 {
 	/**
 	 * Select constructor.

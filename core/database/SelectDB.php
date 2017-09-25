@@ -11,10 +11,10 @@ namespace core\database;
 /**
  * Класс для работы с объектами типа Select
  *
- * Class AbstractSelectDB
+ * Class SelectDB
  * @package core\database
  */
-abstract class AbstractSelectDB
+class SelectDB
 {
 	private $db;
 	private $from;
@@ -37,11 +37,11 @@ abstract class AbstractSelectDB
 	 *
 	 * @param string $table название таблицы
 	 * @param array|string $fields массив полей для получения
-	 * @return AbstractSelectDB $this объект класса Select
+	 * @return SelectDB $this объект класса Select
 	 */
 	public function from($table, $fields)
 	{
-		$params = is_array($fields) ? $fields : array($fields);
+		$fields = is_array($fields) ? $fields : array($fields);
 
 		$tableName = $this->db->getTableName($table);
 		$from = '';
@@ -73,7 +73,7 @@ abstract class AbstractSelectDB
 	 * @param string $where условие
 	 * @param array|string $params массив параметров для подстановки в условие
 	 * @param string $logic логическое объединение условий, может принимать значения И|ИЛИ, по умолчанию 'И'
-	 * @return AbstractSelectDB $this объект класса Select
+	 * @return SelectDB $this объект класса Select
 	 */
 	public function where($where, $params = '', $logic = 'AND')
 	{
@@ -90,7 +90,7 @@ abstract class AbstractSelectDB
 	 * @param string $field поле
 	 * @param array|string $params массив параметров для подстановки
 	 * @param string $logic логическое объединение условий, может принимать значения И|ИЛИ, по умолчанию 'И'
-	 * @return AbstractSelectDB $this объект класса Select
+	 * @return SelectDB $this объект класса Select
 	 */
 	public function whereIn($field, $params, $logic = 'AND')
 	{
@@ -121,7 +121,7 @@ abstract class AbstractSelectDB
 	 *
 	 * @param array|string $fields массив полей сортировки
 	 * @param array|string $asc массив типов сортировки
-	 * @return AbstractSelectDB $this объект класса Select
+	 * @return SelectDB $this объект класса Select
 	 */
 	public function order($fields, $asc = true)
 	{
@@ -143,7 +143,7 @@ abstract class AbstractSelectDB
 	/**
 	 * Добавляет свойство order(рандомный) объекту Select
 	 *
-	 * @return AbstractSelectDB $this объект класса Select
+	 * @return SelectDB $this объект класса Select
 	 */
 	public function orderRand()
 	{
@@ -157,7 +157,7 @@ abstract class AbstractSelectDB
 	 *
 	 * @param int $limit количество строк для вывода
 	 * @param int $offset смещение
-	 * @return AbstractSelectDB $this объект класса Select
+	 * @return SelectDB $this объект класса Select
 	 */
 	public function limit($limit, $offset = 0)
 	{
@@ -193,7 +193,7 @@ abstract class AbstractSelectDB
 	 *
 	 * @param string $where условие
 	 * @param string $logic логическое объединение условий, может принимать значения И|ИЛИ, по умолчанию 'И'
-	 * @return AbstractSelectDB $this объект класса Select
+	 * @return SelectDB $this объект класса Select
 	 */
 	private function setWhere($where, $logic)
 	{

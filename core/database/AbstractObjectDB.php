@@ -8,9 +8,6 @@
 
 namespace core\database;
 
-
-use library\database\SelectDB;
-
 /**
  * Класс для создания объектов и работы с ними
  *
@@ -70,7 +67,7 @@ class AbstractObjectDB
 			return false;
 		}
 
-		$select = new SelectDB();
+		$select = new SelectDB(self::$db);
 		$select->from(self::$table, $this->getSelectFields())
 			->where("`id` = " . self::$db->getSQ(), array($id));
 
@@ -296,7 +293,7 @@ class AbstractObjectDB
 	{
 		$class = get_called_class();
 
-		$select = new SelectDB();
+		$select = new SelectDB(self::$db);
 		$select->from($class::$table, '*')
 			->whereIn($field, $values);
 
@@ -421,7 +418,7 @@ class AbstractObjectDB
 	 */
 	protected static function getAllOnWhere($table, $class, $where = false, array $whereParams = array(), $order =false, $asc = false, $limit = false, $offset = false)
 	{
-		$select = new SelectDB();
+		$select = new SelectDB(self::$db);
 		$select->from($table, array('*'));
 
 		if($where)
@@ -458,7 +455,7 @@ class AbstractObjectDB
 	 */
 	protected function getCountOnWhere($table, $where = false, $whereParams = array())
 	{
-		$select = new SelectDB();
+		$select = new SelectDB(self::$db);
 		$select->from($table, array('COUNT(id)'));
 
 		if($where)
@@ -488,7 +485,7 @@ class AbstractObjectDB
 	 * Добавляет новые свойства объектам по связывающему полю id
 	 *
 	 * @param $objectsDataList
-	 * @param string $class
+	 * @param AbstractObjectDB $class
 	 * @param string $fieldOut
 	 * @param string $fieldIn
 	 * @return array
@@ -576,7 +573,7 @@ class AbstractObjectDB
 	{
 		$value = is_array($value) ? $value : array($value);
 
-		$select = new SelectDB();
+		$select = new SelectDB(self::$db);
 		$select->from(self::$table, array('*'))
 			->where("`$field` = " . self::$db->getSQ(), $value);
 

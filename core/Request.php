@@ -29,7 +29,7 @@ class Request
 	 * @param string $name имя
 	 * @return mixed|null
 	 */
-	public function getData($name)
+	public function __get($name)
 	{
 		return isset($this->data[$name]) ? $this->data[$name] : null;
 	}

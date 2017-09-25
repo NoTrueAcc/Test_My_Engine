@@ -192,7 +192,7 @@ class ArticleDB extends ObjectDB
 	/**
 	 * Базовый селект, чтобы не создавать его лишний раз
 	 *
-	 * @return \core\database\AbstractSelectDB
+	 * @return \core\database\SelectDB
 	 */
 	private static function getBaseSelect()
 	{

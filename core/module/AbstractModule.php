@@ -39,7 +39,7 @@ abstract class AbstractModule
 	 * @param string $propertyName имя свойства
 	 * @return null
 	 */
-	final public function getProperty($propertyName)
+	final public function __get($propertyName)
 	{
 		return array_key_exists($propertyName, $this->properties) ? $this->properties[$propertyName]['value'] : null;
 	}
