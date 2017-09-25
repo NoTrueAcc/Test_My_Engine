@@ -71,8 +71,9 @@ class MainMenu extends AbstractModule
 					}
 				}
 			}
-
-			$this->active = $active;
 		}
+
+		$this->childrens = $childrens;
+		$this->active = $active;
 	}
 }

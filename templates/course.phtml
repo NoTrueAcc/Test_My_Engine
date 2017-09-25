@@ -18,7 +18,7 @@
                             <label for="free_course_email">E-mail: </label>
                         </td>
                         <td>
-                            <input id="free_course_email" type="email" name="email" value="<?=$authUser->email?>">
+                            <input id="free_course_email" type="email" name="email" value="<?=is_null($authUser) ? '' : $authUser->email?>">
                         </td>
                     </tr>
                     <tr>
@@ -26,7 +26,7 @@
                             <label for="free_course_name">Имя: </label>
                         </td>
                         <td>
-                            <input id="free_course_name" type="text" name="name" value="<?=$authUser->name?>">
+                            <input id="free_course_name" type="text" name="name" value="<?=is_null($authUser) ? '' : $authUser->name?>">
                         </td>
                     </tr>
                     <tr>

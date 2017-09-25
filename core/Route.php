@@ -30,18 +30,22 @@ class Route
 			if(class_exists($controllerName))
 			{
 				$controller = new $controllerName;
+			}
 
-				if(method_exists($controller, $actionName))
-				{
-					$controller->$actionName();
-				}
+			if(method_exists($controller, $actionName))
+			{
+				$controller->$actionName();
+			}
+			else
+			{
+				throw new \Exception();
 			}
 		}
 		catch (\Exception $e)
 		{
 			if($e->getMessage() !== 'ACCESS_DENIED')
 			{
-				throw new \Exception('ERROR_404');
+				$controller->action404();
 			}
 		}
 	}

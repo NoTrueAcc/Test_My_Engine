@@ -149,7 +149,7 @@ CREATE TABLE IF NOT EXISTS `xyz_menu` (
   `type` int(11) NOT NULL,
   `title` varchar(100) NOT NULL,
   `link` varchar(255) NOT NULL,
-  `parent_id` int(10) unsigned DEFAULT NULL,
+  `parentId` int(10) unsigned DEFAULT NULL,
   `external` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=10 ;
@@ -158,7 +158,7 @@ CREATE TABLE IF NOT EXISTS `xyz_menu` (
 -- Дамп данных таблицы `xyz_menu`
 --
 
-INSERT INTO `xyz_menu` (`id`, `type`, `title`, `link`, `parent_id`, `external`) VALUES
+INSERT INTO `xyz_menu` (`id`, `type`, `title`, `link`, `parentId`, `external`) VALUES
 (1, 1, 'Главная', '/', NULL, 0),
 (2, 1, 'HTML', '/html.html', NULL, 0),
 (3, 1, 'CSS', '/css.html', NULL, 0),

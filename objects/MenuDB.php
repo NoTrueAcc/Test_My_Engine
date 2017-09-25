@@ -27,7 +27,7 @@ class MenuDB extends ObjectDB
         $this->addProperty('type', 'ValidateId');
         $this->addProperty('title', 'ValidateTitle');
         $this->addProperty('link', 'ValidateUrl');
-        $this->addProperty('parent_id', 'ValidateId');
+        $this->addProperty('parentId', 'ValidateId');
         $this->addProperty('external', 'ValidateBoolean');
     }
 
