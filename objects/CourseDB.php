@@ -9,6 +9,7 @@
 namespace objects;
 
 
+use library\config\Config;
 use library\database\ObjectDB;
 use library\database\SelectDB;
 
@@ -50,23 +51,23 @@ class CourseDB extends ObjectDB
 		$select = new SelectDB();
 		$select->from(self::$table, array('*'))
 			->where($whereType, array($type))
-			->where('latest = ' . self::$db->getSQ(), array(1))
+			->where('`latest` = ' . self::$db->getSQ(), array(1))
 			->orderRand();
 		$latestData = self::$db->select($select);
 
 		$select = new SelectDB();
 		$select->from(self::$table, array('*'))
 			->where($whereType, array($type))
-			->whereFieldInSet('sectionIds', $sectionId)
+			->whereFindInSet('sectionIds', $sectionId)
 			->orderRand();
-		$sectionData = self::$db->select($select);
 
+		$sectionData = self::$db->select($select);
 		$data = array_merge($latestData, $sectionData);
 
 		if(count($data) == 0)
 		{
 			$select = new SelectDB();
-			$select->from(self::$db, '*')
+			$select->from(self::$table, '*')
 				->where($whereType, array($type))
 				->orderRand();
 
@@ -84,9 +85,12 @@ class CourseDB extends ObjectDB
 	 *
 	 * @return bool
 	 */
-	protected function postInit()
+	protected function postLoad()
 	{
-		$this->img = isset($this->img) ? AbstractConfig::DIR_IMG . $this->img : null;
+		if($this->img)
+		{
+			$this->img = Config::DIR_IMG . $this->img;
+		}
 
 		return true;
 	}

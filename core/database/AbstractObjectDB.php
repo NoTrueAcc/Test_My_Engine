@@ -104,10 +104,10 @@ class AbstractObjectDB
 					break;
 			}
 
-			$this->properties[$property][$data['value']] = $value;
+			$this->properties[$property]['value'] = $value;
 		}
 
-		$this->id = $propertiesData['id'];
+		$this->id = isset($propertiesData['id']) ? $propertiesData['id'] : null;
 
 		return $this->postInit();
 	}
@@ -230,7 +230,7 @@ class AbstractObjectDB
 			}
 
 			$obj->init($propertiesData);
-			$resultObjectsDataList[$obj->getId()] = $obj;
+			$resultObjectsDataList[$obj->id] = $obj;
 		}
 
 		return $resultObjectsDataList;
@@ -320,11 +320,11 @@ class AbstractObjectDB
 	 *
 	 * @return int количество записей
 	 */
-	public function getCount()
+	public static function getCount()
 	{
 		$class = get_called_class();
 
-		return $this->getCountOnWhere($class::$table);
+		return self::getCountOnWhere($class::$table);
 	}
 
 	/**
@@ -335,7 +335,16 @@ class AbstractObjectDB
 	 */
 	public function __set($property, $value)
 	{
-		$this->properties[$property]['value'] = $value;
+		if(array_key_exists($property, $this->properties))
+		{
+			$this->properties[$property]['value'] = $value;
+
+			return true;
+		}
+		else
+		{
+			$this->{$property} = $value;
+		}
 	}
 
 	/**
@@ -382,7 +391,7 @@ class AbstractObjectDB
 	 */
 	public static function getDay($date = false)
 	{
-		$date = $date ? $date : time();
+		$date = $date ? strtotime($date) : time();
 
 		return date('d', $date);
 	}
@@ -453,7 +462,7 @@ class AbstractObjectDB
 	 * @param array $whereParams массив параметров для подстановки в условие
 	 * @return string количество строк
 	 */
-	protected function getCountOnWhere($table, $where = false, $whereParams = array())
+	protected static function getCountOnWhere($table, $where = false, $whereParams = array())
 	{
 		$select = new SelectDB(self::$db);
 		$select->from($table, array('COUNT(id)'));

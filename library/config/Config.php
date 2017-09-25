@@ -24,15 +24,15 @@ class Config
 	const DB_PREFIX 	= 'xyz_';
 	const DB_SYM_QUERY  = '?';
 
-	const DIR_IMG       = '/images/';
-	const DIR_ARTICLES  = '/images/articles/';
-	const DIR_AVATAR    = '/images/avatar/';
-	const DIR_TMPL      = '/template/';
-	const DIR_EMAIL     = '/template/email/';
+	const DIR_IMG       = 'images/';
+	const DIR_ARTICLES  = 'images/articles/';
+	const DIR_AVATAR    = 'images/avatar/';
+	const DIR_TMPL      = 'templates/';
+	const DIR_EMAIL     = 'templates/email/';
 
 	const LAYOUT = 'main';
 
-	const FILE_MESSAGES = '/text/messages.ini';
+	const FILE_MESSAGES = 'text/messages.ini';
 
 	const FORMAT_DATE = '%d.%m.%Y %H:%M:%S';
 

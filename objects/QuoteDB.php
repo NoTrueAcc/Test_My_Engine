@@ -42,7 +42,7 @@ class QuoteDB extends ObjectDB
 			->orderRand()
 			->limit(1);
 
-		$quoteData = self::$db->selectCell($select);
+		$quoteData = self::$db->selectRow($select);
 
 		return $this->init($quoteData);
 	}

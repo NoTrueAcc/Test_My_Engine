@@ -38,7 +38,7 @@ class PollDB extends ObjectDB
 	public function loadRandom()
 	{
 		$select = new SelectDB();
-		$select->from(self::$db, '*')
+		$select->from(self::$table, '*')
 			->where('state = ', '1')
 			->orderRand()
 			->limit(1);

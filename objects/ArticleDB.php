@@ -60,6 +60,7 @@ class ArticleDB extends ObjectDB
 		$articlesData = self::$db->select($select);
 		$articles = self::buildMultiple(__CLASS__, $articlesData);
 
+
 		if($postHandling)
 		{
 			$tempArticles = $articles;
@@ -168,8 +169,8 @@ class ArticleDB extends ObjectDB
 	 */
 	protected function postInit()
 	{
-		$this->img = isset($this->img) ? Config::DIR_ARTICLES . $this->img : null;
-		$this->link = Url::getUrl('article', false, array('id' => $this->getId()));
+		$this->img = !is_null($this->img) ? Config::DIR_ARTICLES . $this->img : null;
+		$this->link = Url::getUrl('article', false, array('id' => $this->id));
 
 		return true;
 	}
@@ -205,9 +206,11 @@ class ArticleDB extends ObjectDB
 	private function postHandling()
 	{
 		$this->getSectionAndCategory();
-		$this->countComments = CommentDB::getCountOnArticleId($this->getId());
+		$this->countComments = CommentDB::getCountOnArticleId($this->id);
 		$this->dayShow = ObjectDB::getDay($this->date);
 		$this->monthShow = ObjectDB::getMonth($this->date);
+
+		return $this;
 	}
 
 	/**

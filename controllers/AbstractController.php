@@ -231,7 +231,7 @@ class AbstractController extends \core\controller\AbstractController
 		$courses = array($courseDB1, $courseDB2);
 
 		$course = new Course();
-		$course->course = $courses;
+		$course->courses = $courses;
 		$course->authUser = $this->authUser;
 
 		$quoteDB = new QuoteDB();
@@ -261,7 +261,7 @@ class AbstractController extends \core\controller\AbstractController
 	 */
 	final protected function getPage()
 	{
-		$page = isset($this->request->page) ? $this->request->page : 1;
+		$page = $this->request->page ? $this->request->page : 1;
 
 		if($page < 1)
 		{
@@ -283,19 +283,50 @@ class AbstractController extends \core\controller\AbstractController
 	{
 		$countPages = ceil($countElements / $countOnPage);
 		$active = $this->getPage();
+		$startPage = 0;
+		$endPage = 0;
 
 		if(($active > $countPages) && ($active > 1))
 		{
 			$this->notFound();
 		}
 
+		if($countPages > 1)
+		{
+			$left = $active - 1;
+
+			if($left < floor(Config::COUNT_SHOW_PAGES / 2))
+			{
+				$startPage = 1;
+			}
+			else
+			{
+				$startPage = $active - floor(Config::COUNT_SHOW_PAGES / 2);
+			}
+
+			$endPage = $startPage + Config::COUNT_SHOW_PAGES - 1;
+
+			if($endPage > $countPages)
+			{
+				$startPage -= ($endPage - $countPages);
+				$endPage = $countPages;
+
+				if($startPage < 1)
+				{
+					$startPage = 1;
+				}
+			}
+		}
+
 		$pagination = new Pagination();
-		$this->url = $url ? $url : Url::deletePage(Url::currentUrl());
+		$pagination->url = $url ? $url : Url::deletePage(Url::currentUrl());
 		$pagination->urlPage = Url::addPage($url);
 		$pagination->countElements = $countElements;
 		$pagination->countOnPage = $countOnPage;
 		$pagination->countShowPages = Config::COUNT_SHOW_PAGES;
 		$pagination->active = $active;
+		$pagination->startPage = $startPage;
+		$pagination->endPage = $endPage;
 
 		return $pagination;
 	}

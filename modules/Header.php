@@ -41,7 +41,7 @@ class Header extends AbstractModule
 		$newClass->content = $content;
 		$newClass->httpEquiv = $httpEquiv;
 
-		$this->meta[] = $newClass;
+		$this->meta = $newClass;
 	}
 
 	/**

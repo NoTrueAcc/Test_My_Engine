@@ -72,7 +72,7 @@ class MainMenu extends AbstractModule
 				}
 			}
 
-			$this->active[] = $active;
+			$this->active = $active;
 		}
 	}
 }

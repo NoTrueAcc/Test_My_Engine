@@ -42,7 +42,6 @@ class SelectDB
 	public function from($table, $fields)
 	{
 		$fields = is_array($fields) ? $fields : array($fields);
-
 		$tableName = $this->db->getTableName($table);
 		$from = '';
 
@@ -109,9 +108,9 @@ class SelectDB
 		return $this->where($where, $params, $logic);
 	}
 
-	public function whereFieldInSet($field, $value, $logic = 'AND')
+	public function whereFindInSet($field, $value, $logic = 'AND')
 	{
-		$where = 'FIELD_IN_SET(' . $this->db->getSQ() . "', `$field`) > 0";
+		$where = 'FIND_IN_SET(' . $this->db->getSQ() . ", `$field`) > 0";
 
 		return $this->where($where, array($value), $logic);
 	}

@@ -35,7 +35,7 @@ class ObjectDB extends AbstractObjectDB
 	 */
 	public static function getMonth($date = false)
 	{
-		$date = $date ? $date : time();
+		$date = $date ? strtotime($date) : time();
 
 		return self::$months[date('n', $date) - 1];
 	}

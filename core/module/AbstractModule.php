@@ -45,12 +45,12 @@ abstract class AbstractModule
 	}
 
 	/**
-	 * Устанавливает значенрие свойству объекта
+	 * Устанавливает значение свойству объекта
 	 *
 	 * @param string $propertyName имя свойства
 	 * @param string|int|array $value значение свойства
 	 */
-	final public function setProperty($propertyName, $value)
+	final public function __set($propertyName, $value)
 	{
 		if(array_key_exists($propertyName, $this->properties))
 		{
@@ -102,7 +102,6 @@ abstract class AbstractModule
 	final protected function addProperty($propertyName, $value = null, $isArray = false)
 	{
 		$this->properties[$propertyName]['isArray'] = $isArray;
-		$value = ($isArray && !is_array($value)) ? array($value) : $value;
 
 		if(empty($value) && $isArray)
 		{

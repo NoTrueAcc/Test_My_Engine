@@ -7,7 +7,6 @@
  */
 
 namespace core\database;
-use library\database\SelectDB;
 
 /**
  * Класс для подключения и выполнения запросов к БД
