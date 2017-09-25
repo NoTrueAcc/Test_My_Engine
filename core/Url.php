@@ -161,7 +161,7 @@ class Url
 	{
 		if(!strpos($url, '?'))
 		{
-			return false;
+			return $url;
 		}
 
 		$url = $amp ? str_replace('&', '&amp;', $url) : $url;
@@ -169,10 +169,11 @@ class Url
 		list($urlPart,$getPart) = array_pad(explode('?', $url), 2, '');
 		// Разбиваем строку на переменные
 		parse_str($getPart, $getVars);
+
 		// Удаляем переменную
 		unset($getVars[$name]);
 
-		if(count($getVars))
+		if($getVars)
 		{
 			// Формируем строку с параметрами
 			$url = $urlPart . '?' . http_build_query($getVars);

@@ -43,14 +43,16 @@ class AbstractController extends \core\controller\AbstractController
 	protected $metaDesc;
 	protected $metaKey;
 	protected $mail = null;
-	protected $urlActive;
+	protected $activeUrl;
+	protected $activeUri;
 	protected $sectionId = 0;
 
 	public function __construct()
 	{
 		parent::__construct(new View(Config::DIR_TMPL), new Message(Config::FILE_MESSAGES));
 		$this->mail = new Mail();
-		$this->urlActive = Url::deletePage(Url::currentUrl(Config::ADDRESS));
+		$this->activeUrl = Url::deletePage(Url::currentUrl(Config::ADDRESS));
+		$this->activeUri = Url::deletePage(Url::currentUrl(''));
 	}
 
 	/**
@@ -155,7 +157,7 @@ class AbstractController extends \core\controller\AbstractController
 	protected function getTop()
 	{
 		$topMenu = new TopMenu();
-		$topMenu->uri = $this->urlActive;
+		$topMenu->uri = $this->activeUri;
 		$topMenu->items = MenuDB::getTopMenu();
 
 		return $topMenu;
@@ -187,14 +189,14 @@ class AbstractController extends \core\controller\AbstractController
 		$userPanel = '';
 
 		$mainMenu = new MainMenu();
-		$mainMenu->uri = $this->urlActive;
+		$mainMenu->uri = $this->activeUri;
 		$mainMenu->items = MenuDB::getMainMenu();
 
 		if($this->authUser)
 		{
 			$userPanel = new UserPanel();
 			$userPanel->user = $this->authUser;
-			$userPanel->uri = $this->urlActive;
+			$userPanel->uri = $this->activeUri;
 			$userPanel->addItem('Редактировать профиль', Url::getUrl('editprofile', 'user'));
 			$userPanel->addItem('Выход', Url::getUrl('logout'));
 		}
