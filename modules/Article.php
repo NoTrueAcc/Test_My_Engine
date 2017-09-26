@@ -34,7 +34,7 @@ class Article extends AbstractModule
         $this->addProperty('childrens');
         $childrens = array();
 
-        foreach ($comments as $comment)
+        foreach ($this->comments as $comment)
         {
             $childrens[$comment->id] = $comment->parentId;
         }

@@ -113,7 +113,7 @@ class ArticleDB extends ObjectDB
 	public static function getLimitOnCategoryId($categoryId, $limit, $offset = false)
 	{
 		$select = self::getBaseSelect();
-		$select->where('sectionId = ' . self::$db->getSQ(), array($categoryId))
+		$select->where('catId = ' . self::$db->getSQ(), array($categoryId))
 			->order('date', false)
 			->limit($limit, $offset);
 

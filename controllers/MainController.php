@@ -17,6 +17,7 @@ use modules\Category;
 use modules\Intro;
 use objects\ArticleDB;
 use objects\CategoryDB;
+use objects\CommentDB;
 use objects\SectionDB;
 
 class MainController extends AbstractController
@@ -90,7 +91,7 @@ class MainController extends AbstractController
         $this->metaKey = $categoryDB->metakey;
 
         $sectionDB = new SectionDB();
-        $sectionDB->loadOnId($categoryDB->sectionId);
+        $sectionDB->loadOnId($this->sectionId);
 
         $hornav = $this->getHornav();
         $hornav->addData($sectionDB->title, $sectionDB->link);
@@ -158,6 +159,8 @@ class MainController extends AbstractController
         $article->prevArticle = ($prevArticle->isSaved()) ? $prevArticle : null;
         $article->nextArticle = ($nextArticle->isSaved()) ? $nextArticle : null;
         $article->linkRegister = Url::getUrl('register');
+
+		$article->comments = CommentDB::getAllOnArticleId($this->request->id);
 
         $this->render($article);
     }

@@ -44,11 +44,11 @@ class CommentDB extends ObjectDB
 	{
 		$select = new SelectDB();
 		$select->from(self::$table, array('*'))
-			->where('`articleId = `' . self::$db->getSQ(), array($articleId))
+			->where('`articleId` = ' . self::$db->getSQ(), array($articleId))
 			->order('date');
 
 		$comments = ObjectDB::buildMultiple(__CLASS__, self::$db->select($select));
-		$comments = ObjectDB::addSubObject($comments, 'UserDB', 'user', 'userId');
+		$comments = ObjectDB::addSubObject($comments, 'objects\UserDB', 'user', 'userId');
 
 		return $comments;
 	}

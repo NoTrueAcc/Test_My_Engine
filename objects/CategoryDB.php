@@ -32,6 +32,7 @@ class CategoryDB extends ObjectDB
 		$this->addProperty('description', 'ValidateText');
 		$this->addProperty('metaDesc', 'ValidateMetaDesc');
 		$this->addProperty('metaKey', 'ValidateMetaKey');
+		$this->addProperty('sectionId', 'ValidateId');
 	}
 
 	/**

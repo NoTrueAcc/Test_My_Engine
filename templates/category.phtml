@@ -1,10 +1,12 @@
 <div class="main">
     <?php $number = 0; ?>
     <?php foreach ($articles as $article) { ?>
-        <div><?=$number?> <a href="<?=$article->link?>"><?=$article->title?></a></div>
-        <div class="category_author">
+        <div class="more_articles">
+        <?=$number?> <a href="<?=$article->link?>"><?=$article->title?></a>
+        <span class="category_author">
             <img src="/images/icon_user.png" alt="">Alex_R
-        </div>
+        </span>
+         </div>
         <div class="clear"></div>
     <?php $number++; ?>
     <?php } ?>
