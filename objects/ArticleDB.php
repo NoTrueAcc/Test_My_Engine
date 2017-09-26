@@ -83,10 +83,37 @@ class ArticleDB extends ObjectDB
 	 * @param int $offset смещение
 	 * @return array массив объектов статей
 	 */
-	public static function getLimitOnSectionId($sectionId, $limit, $offset)
+	public static function getLimitOnSectionId($sectionId, $limit, $offset = false)
 	{
 		$select = self::getBaseSelect();
 		$select->where('sectionId = ' . self::$db->getSQ(), array($sectionId))
+			->order('date', false)
+			->limit($limit, $offset);
+
+		$articlesData = self::$db->select($select);
+		$tempArticles = ObjectDB::buildMultiple(__CLASS__, $articlesData);
+		$articles = array();
+
+		foreach ($tempArticles as $tempArticle)
+		{
+			$articles[] = $tempArticle->postHandling();
+		}
+
+		return $articles;
+	}
+
+	/**
+	 * Возвращает массив объектов лимитированных статей по айди категории
+	 *
+	 * @param int|string $categoryId айди категории
+	 * @param int $limit лимит
+	 * @param int $offset смещение
+	 * @return array массив объектов статей
+	 */
+	public static function getLimitOnCategoryId($categoryId, $limit, $offset = false)
+	{
+		$select = self::getBaseSelect();
+		$select->where('sectionId = ' . self::$db->getSQ(), array($categoryId))
 			->order('date', false)
 			->limit($limit, $offset);
 
@@ -109,9 +136,9 @@ class ArticleDB extends ObjectDB
 	 * @param bool|string $order поле сортировки
 	 * @return array массив объектов статей
 	 */
-	public static function getAllOnSectionId($sectionId, $order = false)
+	public static function getAllOnSectionId($sectionId, $order = false, $asc = true)
 	{
-		return self::getAllOnField(self::$table, __CLASS__, 'sectionId', $sectionId, $order);
+		return self::getAllOnField(self::$table, __CLASS__, 'sectionId', $sectionId, $order, $asc);
 	}
 
 	/**

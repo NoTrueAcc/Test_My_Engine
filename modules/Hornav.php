@@ -34,7 +34,7 @@ class Hornav extends AbstractModule
         $newClass->title = $title;
         $newClass->link = $link;
 
-        $this->data[] = $newClass;
+        $this->data = $newClass;
     }
 
 	/**

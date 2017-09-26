@@ -39,7 +39,7 @@ class SectionDB extends ObjectDB
 	 */
 	protected function postInit()
 	{
-		$this->img = isset($this->img) ? Config::DIR_ARTICLES . $this->img : null;
+		$this->img = $this->img ? Config::DIR_ARTICLES . $this->img : null;
 		$this->link = Url::getUrl('section', false, array('id' => $this->getId()));
 	}
 

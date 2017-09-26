@@ -34,7 +34,7 @@ class Config
 
 	const FILE_MESSAGES = 'text/messages.ini';
 
-	const FORMAT_DATE = '%d.%m.%Y %H:%M:%S';
+	const FORMAT_DATE = 'd.m.Y H:i:s';
 
 	const COUNT_ARTICLES_ON_PAGE    = 3;
 	const COUNT_SHOW_PAGES          = 10;

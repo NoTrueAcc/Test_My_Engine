@@ -17,6 +17,7 @@ use library\mail\Mail;
 use modules\Auth;
 use modules\Course;
 use modules\Header;
+use modules\Hornav;
 use modules\MainMenu;
 use modules\PageMessage;
 use modules\Pagination;
@@ -244,6 +245,14 @@ class AbstractController extends \core\controller\AbstractController
 
 		return $course . $quote;
 	}
+
+	protected function getHornav()
+    {
+        $hornav = new Hornav();
+        $hornav->addData('Главная страница', Url::getUrl(''));
+
+        return $hornav;
+    }
 
 	/**
 	 * Возвращает смещение относительно страницы

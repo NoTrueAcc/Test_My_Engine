@@ -9,9 +9,15 @@
 namespace controllers;
 
 
+use core\Url;
 use library\config\Config;
+use modules\Article;
 use modules\Blog;
+use modules\Category;
+use modules\Intro;
 use objects\ArticleDB;
+use objects\CategoryDB;
+use objects\SectionDB;
 
 class MainController extends AbstractController
 {
@@ -30,4 +36,129 @@ class MainController extends AbstractController
 
 		$this->render($this->renderData(array('blog' => $blog), 'index'));
 	}
+
+	public function actionSection()
+    {
+        $sectionDB = new SectionDB();
+        $sectionDB->loadOnId($this->request->id);
+
+        if(!$sectionDB->isSaved())
+        {
+            $this->notFound();
+        }
+
+        $this->sectionId = $sectionDB->sectionId;
+        $this->title = $sectionDB->title;
+        $this->metaDesc = $sectionDB->metaDesc;
+        $this->metaKey = $sectionDB->metakey;
+
+        $hornav = $this->getHornav();
+        $hornav->addData($sectionDB->title);
+
+        $intro = new Intro();
+        $intro->hornav = $hornav;
+        $intro->obj = $sectionDB;
+
+        $blog = new Blog();
+        $articles = ArticleDB::getLimitOnSectionId($this->request->id, Config::COUNT_ARTICLES_ON_PAGE);
+        $moreArticles = ArticleDB::getAllOnSectionId($this->request->id);
+
+        foreach ($articles as $article)
+        {
+            unset($moreArticles[$article->id]);
+        }
+
+        $blog->articles = $articles;
+        $blog->moreArticles = $moreArticles;
+
+        $this->render($intro . $blog);
+    }
+
+	public function actionCategory()
+    {
+        $categoryDB = new CategoryDB();
+        $categoryDB->loadOnId($this->request->id);
+
+        if(!$categoryDB->isSaved())
+        {
+            $this->notFound();
+        }
+
+        $this->sectionId = $categoryDB->sectionId;
+        $this->title = $categoryDB->title;
+        $this->metaDesc = $categoryDB->metaDesc;
+        $this->metaKey = $categoryDB->metakey;
+
+        $sectionDB = new SectionDB();
+        $sectionDB->loadOnId($categoryDB->sectionId);
+
+        $hornav = $this->getHornav();
+        $hornav->addData($sectionDB->title, $sectionDB->link);
+        $hornav->addData($categoryDB->title);
+
+        $intro = new Intro();
+        $intro->hornav = $hornav;
+        $intro->obj = $categoryDB;
+
+        $category = new Category();
+        $articles = ArticleDB::getLimitOnCategoryId($this->request->id, Config::COUNT_ARTICLES_ON_PAGE);
+        $moreArticles = ArticleDB::getAllOnCategoryId($this->request->id);
+
+        foreach ($articles as $article)
+        {
+            unset($moreArticles[$article->id]);
+        }
+
+        $category->articles = $articles;
+        $category->moreArticles = $moreArticles;
+
+        $this->render($intro . $category);
+    }
+
+    public function actionArticle()
+    {
+        $articleDB = new ArticleDB();
+        $articleDB->loadOnId($this->request->id);
+
+        if(!$articleDB->isSaved())
+        {
+            $this->notFound();
+        }
+
+        $this->title = $articleDB->title;
+        $this->metaDesc = $articleDB->metaDesc;
+        $this->metaKey = $articleDB->metaKey;
+
+        $hornav = $this->getHornav();
+
+        if($articleDB->section)
+        {
+            $this->sectionId = $articleDB->sectionId;
+            $hornav->addData($articleDB->section->title, $articleDB->section->link);
+            $this->activeUri = Url::getUrl('section', '', array('id', $articleDB->section->id));
+        }
+
+        if($articleDB->category)
+        {
+            $hornav->addData($articleDB->category->title, $articleDB->category->link);
+            $this->activeUri = Url::getUrl('category', '', array('id', $articleDB->category->id));
+        }
+
+        $hornav->addData($articleDB->title);
+
+        $prevArticle = new ArticleDB();
+        $prevArticle->getPrevArticle($articleDB);
+        $nextArticle = new ArticleDB();
+        $nextArticle->getNextArticle($articleDB);
+
+        $article = new Article();
+        $article->hornav = $hornav;
+        $article->authUser = $this->authUser;
+        $article->article = $articleDB;
+        $article->prevArticle = ($prevArticle->isSaved()) ? $prevArticle : null;
+        $article->nextArticle = ($nextArticle->isSaved()) ? $nextArticle : null;
+        $article->linkRegister = Url::getUrl('register');
+
+        $this->render($article);
+    }
 }

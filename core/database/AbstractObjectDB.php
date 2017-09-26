@@ -97,7 +97,7 @@ class AbstractObjectDB
 			switch ($data['type'])
 			{
 				case self::TYPE_TIMESTAMP :
-					$value = is_null($value) ? null : strftime($value);
+					$value = is_null($value) ? null : date($this->formatDate, $value);
 					break;
 				case self::TYPE_IP :
 					$value = is_null($value) ? null : long2ip($value);
