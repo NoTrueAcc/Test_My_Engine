@@ -36,7 +36,7 @@ class UserPanel extends AbstractModule
         $newClass->title = $title;
         $newClass->link = $link;
 
-        $this->items[] = $newClass;
+        $this->items = $newClass;
     }
 
 	/**

@@ -48,14 +48,14 @@ class JavaScriptValidator
 
 		if($minLen)
 		{
-			$newClass->minLen = ValidatePassword::MIN_LEN;
-			$newClass->textMinLen = $this->message->getMessage(ValidatePassword::CODE_MIN_LEN);
+			$newClass->minLen = \validators\ValidatePassword::MIN_LEN;
+			$newClass->textMinLen = $this->message->getMessage(\validators\ValidatePassword::CODE_MIN_LEN);
 		}
 
-		$newClass->maxLen = ValidatePassword::MAX_LEN;
-		$newClass->textMaxLen = $this->message->getMessage(ValidatePassword::CODE_MAX_LEN);
+		$newClass->maxLen = \validators\ValidatePassword::MAX_LEN;
+		$newClass->textMaxLen = $this->message->getMessage(\validators\ValidatePassword::CODE_MAX_LEN);
 		$newClass->textEmpty = $textEmpty ? $this->message->getMessage($textEmpty) :
-			$this->message->getMessage(ValidatePassword::CODE_EMPTY);
+			$this->message->getMessage(\validators\ValidatePassword::CODE_EMPTY);
 
 		if($fieldEqual)
 		{
@@ -78,14 +78,14 @@ class JavaScriptValidator
 	{
 		$newClass = $this->getBaseClass();
 		$newClass->type = 'name';
-		$newClass->maxLen = ValidateName::MAX_LEN;
+		$newClass->maxLen = \validators\ValidateName::MAX_LEN;
 
 		$newClass->textEmpty = $textEmpty ? $this->message->getMessage($textEmpty) :
-			$this->message->getMessage(ValidateName::CODE_EMPTY);
+			$this->message->getMessage(\validators\ValidateName::CODE_EMPTY);
 		$newClass->textMaxLen = $maxLen ? $this->message->getMessage($maxLen)
-			: $this->message->getMessage(ValidateName::CODE_MAX_LEN);
+			: $this->message->getMessage(\validators\ValidateName::CODE_MAX_LEN);
 		$newClass->textType = $textType ? $this->message->getMessage($textType)
-			: $this->message->getMessage(ValidateName::CODE_INVALID);
+			: $this->message->getMessage(\validators\ValidateName::CODE_INVALID);
 
 		return $newClass;
 	}
@@ -102,14 +102,14 @@ class JavaScriptValidator
 	{
 		$newClass = $this->getBaseClass();
 		$newClass->type = 'login';
-		$newClass->maxLen = ValidateName::MAX_LEN;
+		$newClass->maxLen = \validators\ValidateName::MAX_LEN;
 
 		$newClass->textEmpty = $textEmpty ? $this->message->getMessage($textEmpty) :
-			$this->message->getMessage(ValidateLogin::CODE_EMPTY);
+			$this->message->getMessage(\validators\ValidateLogin::CODE_EMPTY);
 		$newClass->textMaxLen = $maxLen ? $this->message->getMessage($maxLen)
-			: $this->message->getMessage(ValidateLogin::CODE_MAX_LEN);
+			: $this->message->getMessage(\validators\ValidateLogin::CODE_MAX_LEN);
 		$newClass->textType = $textType ? $this->message->getMessage($textType)
-			: $this->message->getMessage(ValidateLogin::CODE_INVALID);
+			: $this->message->getMessage(\validators\ValidateLogin::CODE_INVALID);
 
 		return $newClass;
 	}
@@ -126,14 +126,14 @@ class JavaScriptValidator
 	{
 		$newClass = $this->getBaseClass();
 		$newClass->type = 'email';
-		$newClass->maxLen = ValidateName::MAX_LEN;
+		$newClass->maxLen = \validators\ValidateName::MAX_LEN;
 
 		$newClass->textEmpty = $textEmpty ? $this->message->getMessage($textEmpty) :
-			$this->message->getMessage(ValidateEmail::CODE_EMPTY);
+			$this->message->getMessage(\validators\ValidateEmail::CODE_EMPTY);
 		$newClass->textMaxLen = $maxLen ? $this->message->getMessage($maxLen)
-			: $this->message->getMessage(ValidateEmail::CODE_MAX_LEN);
+			: $this->message->getMessage(\validators\ValidateEmail::CODE_MAX_LEN);
 		$newClass->textType = $textType ? $this->message->getMessage($textType)
-			: $this->message->getMessage(ValidateEmail::CODE_INVALID);
+			: $this->message->getMessage(\validators\ValidateEmail::CODE_INVALID);
 
 		return $newClass;
 	}

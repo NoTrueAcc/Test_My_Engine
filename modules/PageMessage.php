@@ -20,6 +20,7 @@ class PageMessage extends AbstractModule
 	{
 		parent::__construct();
 
+		$this->addProperty('hornav');
 		$this->addProperty('header');
 		$this->addProperty('text');
 	}

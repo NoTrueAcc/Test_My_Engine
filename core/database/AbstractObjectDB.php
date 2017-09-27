@@ -632,9 +632,9 @@ class AbstractObjectDB
 	 * @param string $secret секретное слово
 	 * @return string
 	 */
-	protected static function hash($str, $secret)
+	protected static function hash($str)
 	{
-		return md5($str, $secret);
+		return password_hash($str, PASSWORD_BCRYPT);
 	}
 
 	/**

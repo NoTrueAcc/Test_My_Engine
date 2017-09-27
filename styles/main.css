@@ -590,7 +590,13 @@ footer{
 
 #share {
 	font-weight: bold;
-	margin: 20px 0;
+	margin: -55px;
+	width: 40%;
+	float: right;
+}
+
+.main div.page_message {
+	padding: 5px 0 30px 10px;
 }
 
 #recom {
@@ -676,6 +682,10 @@ footer{
 
 #comments textarea {
 	padding: 5px !important;
+}
+
+#comments h2 {
+	width: 40%;
 }
 
 .form {

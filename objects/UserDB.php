@@ -102,7 +102,7 @@ class UserDB extends ObjectDB
 	/**
 	 * Выход
 	 */
-	public function logout()
+	public static function logout()
 	{
 		if(!session_id())
 		{
@@ -124,12 +124,11 @@ class UserDB extends ObjectDB
 	 * @return UserDB
 	 * @throws \Exception
 	 */
-	public function authUser($login = false, $password = false)
+	public static function authUser($login = false, $password = false)
 	{
 		if($login && $password)
 		{
 			$auth = true;
-			$password = self::hash($password, Config::SECRET);
 		}
 		else
 		{
@@ -152,19 +151,28 @@ class UserDB extends ObjectDB
 		}
 
 		$select = new SelectDB();
-		$select->from(self::$table, 'COUNT(id)')
-			->where('`login` = ' . self::$db->getSQ(), $login)
-			->where('`password` = ' . self::$db->getSQ(), $password);
+		$select->from(self::$table, 'password')
+			->where('`login` = ' . self::$db->getSQ(), $login);
 
-		$countUsers = self::$db->selectCell($select);
+		$passwordHash = self::$db->selectCell($select);
 
-		if($countUsers == 1)
+		if($auth)
+		{
+			$checkPassword = password_verify($password, $passwordHash);
+		}
+		else
+		{
+			$checkPassword = $password == $passwordHash;
+		}
+
+		if($passwordHash && $checkPassword)
 		{
 			$user = new UserDB();
+			$user->loadOnLogin($login);
 
-			if(is_null($user->activation))
+			if($user->activation != '')
 			{
-				throw new \Exception('ERROR_ACTIVATION_USER');
+				throw new \Exception('ERROR_ACTIVATE_USER');
 			}
 
 			if($auth)
@@ -230,7 +238,9 @@ class UserDB extends ObjectDB
 	{
 		if(!is_null($this->newPassword))
 		{
-			$this->password = self::hash($this->newPassword, Config::SECRET);
+			$this->password = self::hash($this->newPassword);
 		}
+
+		return true;
 	}
 }

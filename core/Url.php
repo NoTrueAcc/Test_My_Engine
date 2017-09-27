@@ -197,4 +197,15 @@ class Url
 	public static function addID($url, $id) {
 		return $url . "#" . $id;
 	}
+
+	/**
+	 * Добавляет в куки название страницы с определенным временем жизни
+	 *
+	 * @param string $pageName имя страницы
+	 * @param string|int $lifeTime время жизни куки
+	 */
+	public static function setCookiePageAccess($pageName, $lifeTime = 60)
+	{
+		setcookie($pageName, true, time() + $lifeTime);
+	}
 }

@@ -10,11 +10,15 @@ namespace controllers;
 
 
 use core\Url;
+use library\Captcha;
 use library\config\Config;
 use modules\Article;
 use modules\Blog;
 use modules\Category;
+use modules\Form;
+use modules\Hornav;
 use modules\Intro;
+use modules\PageMessage;
 use modules\PollResult;
 use objects\ArticleDB;
 use objects\CategoryDB;
@@ -23,6 +27,7 @@ use objects\PollDataDB;
 use objects\PollDB;
 use objects\PollVoterDB;
 use objects\SectionDB;
+use objects\UserDB;
 
 class MainController extends AbstractController
 {
@@ -207,4 +212,140 @@ class MainController extends AbstractController
 
         $this->render($pollResult);
     }
+
+    public function actionRegister()
+	{
+		$messageName = 'register';
+
+		if($this->request->register)
+		{
+			$userOldFirst = new UserDB();
+			$userOldFirst->loadOnEmail($this->request->email);
+			$userOldSecond = new UserDB();
+			$userOldSecond->loadOnLogin($this->request->login);
+			$captcha = $this->request->captcha;
+
+			$checks = array(
+				array(Captcha::check($captcha), true, 'ERROR_CAPTCHA_CONTENT'),
+				array($this->request->password, $this->request->passwordConf, 'ERROR_PASSWORD_CONF'),
+				array($userOldFirst->isSaved(), false, 'ERROR_EMAIL_ALREADY_EXISTS'),
+				array($userOldSecond->isSaved(), false, 'ERROR_LOGIN_ALREADY_EXISTS')
+			);
+
+			$user = new UserDB();
+			$fields = array('name', 'login', 'email', array('setPassword()', $this->request->password));
+			$user = $this->formProcessor->process($messageName, $user, $fields, $checks);
+
+			if($user instanceof UserDB)
+			{
+				$this->mail->send($user->email, array('user' => $user, 'link' => Url::getUrl('activate', '', array('login' => $user->login, 'key' => $user->activation), false, Config::ADDRESS)), 'register');
+
+				Url::setCookiePageAccess('sregister');
+				$this->redirect(Url::getUrl('sregister'));
+			}
+		}
+
+		$this->title = 'Регистрация на сайте ' . Config::SITENAME;
+		$this->metaDesc = 'Регистрация на сайте ' .Config::SITENAME . '.';
+		$this->metaKey = 'регистрация на сайте ' . mb_strtolower(Config::SITENAME) . ', зарегистрироваться сайт ' . mb_strtolower(Config::SITENAME);
+		$hornav = $this->getHornav();
+		$hornav->addData('Регистрация');
+
+		$form = new Form();
+		$form->hornav = $hornav;
+		$form->header = 'Регистрация';
+		$form->name = 'register';
+		$form->action = Url::currentUrl();
+		$form->message = $this->formProcessor->getSessionMessage($messageName);
+		$form->text('name', 'Ваше имя:', $this->request->name);
+		$form->text('login', 'Логин:', $this->request->login);
+		$form->text('email', 'Email:', $this->request->email);
+		$form->password('password', 'Пароль:');
+		$form->password('passwordConf', 'Подтвердите пароль:');
+		$form->captcha('captcha', 'Введите код с картинки:');
+		$form->submit('Регистрация');
+
+		$form->addJSV('name', $this->jsValidator->name());
+		$form->addJSV('login', $this->jsValidator->login());
+		$form->addJSV('email', $this->jsValidator->email());
+		$form->addJSV('password', $this->jsValidator->password('passwordConf'));
+		$form->addJSV('captcha', $this->jsValidator->captcha());
+
+		$this->render($form);
+	}
+
+	public function actionSregister()
+	{
+		if(!isset($_COOKIE['sregister']) && !$_COOKIE['sregister'])
+		{
+			$this->redirect(Url::currentUrl());
+		}
+
+		$this->title = 'Регистрация на сайте ' . Config::SITENAME;
+		$this->metaDesc = 'Регистрация на сайте ' . Config::SITENAME . '.';
+		$this->metaKey = 'регистрация сайт ' . mb_strtolower(Config::SITENAME) . ', зарегистрироваться сайт ' . mb_strtolower(Config::SITENAME);
+
+		$hornav = $this->getHornav();
+		$hornav->addData('Регистрация');
+
+		$pageMessage = new PageMessage();
+		$pageMessage->hornav = $hornav;
+		$pageMessage->header = 'Регистрация';
+		$pageMessage->text = 'Учетная запись создана. На указанный Вами адрес электронной почты отправлено письмо с инструкцией по активации. Если письмо не доходит, то обратитесь к администрации.';
+
+		$this->render($pageMessage);
+	}
+
+	public function actionActivate()
+	{
+		$userDB = new UserDB();
+		$userDB->loadOnLogin($this->request->login);
+		$hornav = $this->getHornav();
+
+		if($userDB->isSaved() && ($userDB->activation == ''))
+		{
+			$this->title = 'Ваш аккаунт уже активирован!';
+			$this->metaDesc = 'Вы можете войти в ваш аккаунт, используя Ваш логин и пароль.';
+			$this->metaKey = 'активация, успешная активация, успешная активация регистрация';
+			$hornav->addData('Активация');
+		}
+		elseif($userDB->activation != $this->request->key)
+		{
+			$this->title = 'Ошибка при активации';
+			$this->metaDesc = 'Неверный код активации, если ошибка будет повторяться, то обратитесь к администратору.';
+			$this->metaKey = 'активация, ошибка активация, ошибка активация регистрация';
+			$hornav->addData('Ошибка активации');
+		}
+		elseif($userDB->isSaved() && ($userDB->activation == $this->request->key))
+		{
+			$userDB->activation = '';
+
+			try
+			{
+				$userDB->save();
+			}
+			catch (\Exception $e)
+			{
+				throw new \Exception($e);
+			}
+
+			$this->title = "Ваш аккаунт успешно активирован";
+			$this->metaDesc = "Теперь Вы можете войти в свою учётную запись, используя Ваши логин и пароль.";
+			$this->metaKey = "активация, успешная активация, успешная активация регистрация";
+			$hornav->addData("Активация");
+		}
+
+		$pageMessage = new PageMessage();
+		$pageMessage->hornav = $hornav;
+		$pageMessage->header = $this->title;
+		$pageMessage->text = $this->metaDesc;
+
+		$this->render($pageMessage);
+	}
+
+	public function actionLogout()
+	{
+		UserDB::logout();
+		$this->redirect($_SERVER['HTTP_REFERER']);
+	}
 }

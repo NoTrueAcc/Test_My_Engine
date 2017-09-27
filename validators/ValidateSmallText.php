@@ -6,7 +6,7 @@
  * Time: 18:10
  */
 
-namespace validator;
+namespace validators;
 
 /**
  * Класс для проверки короткого текста на корректность

@@ -24,6 +24,7 @@ use library\JavaScriptValidator;
 abstract class AbstractController
 {
 	protected $view;
+	protected $message;
 	protected $request;
 	protected $formProcessor = null;
 	protected $authUser = null;
@@ -41,6 +42,7 @@ abstract class AbstractController
 		$this->formProcessor = new FormProcessor($this->request, $message);
 		$this->jsValidator = new JavaScriptValidator($message);
 		$this->authUser = $this->authUser();
+		$this->message = $message;
 
 		if(!$this->access())
 		{

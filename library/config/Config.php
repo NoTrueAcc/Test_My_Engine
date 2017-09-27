@@ -28,7 +28,7 @@ class Config
 	const DIR_ARTICLES  = 'images/articles/';
 	const DIR_AVATAR    = 'images/avatars/';
 	const DIR_TMPL      = 'templates/';
-	const DIR_EMAIL     = 'templates/email/';
+	const DIR_EMAIL     = 'templates/emails/';
 
 	const VALIDATOR_NAMESPACE = 'validators\\';
 

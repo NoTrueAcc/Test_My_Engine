@@ -51,34 +51,12 @@
         <?php if ($nextArticle) { ?><a id="next_article" href="<?=$nextArticle->link?>">Следующая статья</a><?php } ?>
         <div class="clear"></div>
     </div>
-    <div id="article_copy">
-        <p class="center"><i>Копирование материалов разрешается только с указанием автора (Михаил Русаков) и индексируемой прямой ссылкой на сайт (<a href="<?=\library\config\Config::ADDRESS?>"><?=\library\config\Config::ADDRESS?></a>)!</i></p>
-    </div>
-    <div id="article_vk">
-        <p>Добавляйтесь ко мне в друзья <b>ВКонтакте</b>: <a rel="external" href="http://vk.com/myrusakov">http://vk.com/myrusakov</a>.<br />Если Вы хотите дать оценку мне и моей работе, то напишите её в моей группе: <a rel="external" href="http://vk.com/rusakovmy">http://vk.com/rusakovmy</a>.</p>
-    </div>
-    <p>Если у Вас остались какие-либо вопросы, либо у Вас есть желание высказаться по поводу этой статьи, то Вы можете оставить свой комментарий внизу страницы.</p>
-    <div id="share">
-        <p>Порекомендуйте эту статью друзьям:</p>
-        <script type="text/javascript">getSocialNetwork("<?=\library\config\Config::DIR_IMG?>", "");</script>
-    </div>
-    <p>Если Вам понравился сайт, то разместите ссылку на него (у себя на сайте, на форуме, в контакте):</p>
-    <ol id="recom">
-        <li>
-            Кнопка:
-            <br /><textarea name="" cols="50" rows="5">&lt;a href="<?=\library\config\Config::ADDRESS?>" target="_blank"&gt;&lt;img src="<?=\library\config\Config::ADDRESS.\library\config\Config::DIR_IMG?>button.gif" style="border: 0; height: 31px; width: 88px;" alt="Как создать свой сайт" /&gt;&lt;/a&gt;</textarea>
-            <p>Она выглядит вот так: <a href="<?=\library\config\Config::ADDRESS?>" rel="external"><img src="<?=\library\config\Config::ADDRESS.\library\config\Config::DIR_IMG?>button.gif" style="border: 0; height: 31px; width: 88px;" alt="Как создать свой сайт" /></a></p>
-        </li>
-        <li>
-            Текстовая ссылка:<br /><textarea name="" cols="50" rows="5">&lt;a href="<?=\library\config\Config::ADDRESS?>" target="_blank"&gt;Как создать свой сайт&lt;/a&gt;</textarea>
-            <p>Она выглядит вот так: <a href="<?=\library\config\Config::ADDRESS?>" rel="external">Как создать свой сайт</a></p>
-        </li>
-        <li>BB-код ссылки для форумов (например, можете поставить её в подписи):
-            <br /><textarea name="" cols="50" rows="5">[URL="<?=\library\config\Config::ADDRESS?>"]Как создать свой сайт[/URL]</textarea>
-        </li>
-    </ol>
     <div id="comments">
         <h2 class="h1">Комментарии (<span id="count_comments"><?=count($comments)?></span>):</h2>
+		<div id="share">
+			<p>Порекомендуйте эту статью друзьям:</p>
+			<script type="text/javascript">getSocialNetwork("<?=\library\config\Config::DIR_IMG?>", "");</script>
+		</div>
         <input type="button" value="Добавить комментарий" id="add_comment" <?php if (!$authUser) { ?>onclick="alert('Для добавления комментариев необходимо авторизоваться на сайте!')"<?php } ?> />
         <?php foreach ($comments as $comment) { ?>
             <?php if ($comment->parentId == 0) { ?><?=printComment($comment, $comments, $childrens, $authUser)?><?php } ?>

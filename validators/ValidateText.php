@@ -6,7 +6,7 @@
  * Time: 18:05
  */
 
-namespace validator;
+namespace validators;
 
 
 use core\validator\AbstractValidator;

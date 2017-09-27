@@ -6,7 +6,7 @@
  * Time: 17:29
  */
 
-namespace validator;
+namespace validators;
 
 
 use core\validator\AbstractValidator;
@@ -24,7 +24,7 @@ class ValidatePassword extends AbstractValidator
     const CODE_MIN_LEN = 'ERROR_PASSWORD_MIN_LEN';
     const CODE_MAX_LEN = 'ERROR_PASSWORD_MAX_LEN';
     const CODE_EMPTY = 'ERROR_PASSWORD_EMPTY';
-    const CODE_CONTENT = 'ERROR_PASS_CONTENT';
+    const CODE_CONTENT = 'ERROR_PASSWORD_CONTENT';
 
     protected function validate()
     {
@@ -41,10 +41,6 @@ class ValidatePassword extends AbstractValidator
             elseif(mb_strlen($this->data) > self::MAX_LEN)
             {
                 $this->setError(self::CODE_MAX_LEN);
-            }
-            elseif(!preg_match('/^[a-z0-9_]+$/i', $this->data))
-            {
-                $this->setError(self::CODE_CONTENT);
             }
         }
     }

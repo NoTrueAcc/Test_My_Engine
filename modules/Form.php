@@ -17,6 +17,7 @@ class Form extends AbstractModule
 	{
 		parent::__construct();
 
+		$this->addProperty('hornav');
 		$this->addProperty('name');
 		$this->addProperty('action');
 		$this->addProperty('method', 'post');
@@ -32,7 +33,7 @@ class Form extends AbstractModule
 	 * Добавляет объект валидатора свойству объекта
 	 *
 	 * @param string $field название валидатора
-	 * @param JavaScriptValidator $jsv объект валидатора
+	 * @param object $jsv объект валидатора
 	 */
 	public function addJSV($field, $jsv)
 	{
@@ -127,7 +128,7 @@ class Form extends AbstractModule
 		$newClass->value = $value;
 		$newClass->placeholder = $placeholder;
 
-		$this->inputs[] = $newClass;
+		$this->inputs = $newClass;
 	}
 
 	/**

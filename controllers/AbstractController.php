@@ -31,6 +31,7 @@ use objects\MenuDB;
 use objects\PollDataDB;
 use objects\PollDB;
 use objects\QuoteDB;
+use objects\UserDB;
 
 /**
  * Класс контроллер
@@ -340,5 +341,38 @@ class AbstractController extends \core\controller\AbstractController
 		$pagination->endPage = $endPage;
 
 		return $pagination;
+	}
+
+	/**
+	 * Действие авторизации пользователя
+	 *
+	 * @return bool|null
+	 */
+	protected function authUser()
+	{
+		$login = '';
+		$password = '';
+		$redirect = false;
+
+		if($this->request->auth)
+		{
+			$login = $this->request->login;
+			$password = $this->request->password;
+			$redirect = true;
+		}
+
+		$user = $this->formProcessor->auth('auth', 'objects\UserDB', 'authUser', $login, $password);
+
+		if($user instanceof UserDB)
+		{
+			if($redirect)
+			{
+				$this->redirect(Url::currentUrl());
+			}
+
+			return $user;
+		}
+
+		return null;
 	}
 }

@@ -83,7 +83,14 @@ abstract class AbstractMail
 		$subject = $lines[0];
 		unset($lines[0]);
 		$subject = '?=utf-8?B?' . base64_encode($subject) . '?=';
-		$body = ($this->type == 'text/html') ? nl2br(explode('\n', $subject)) : explode('\n', $subject);
+		$body = '';
+
+		for($i = 1; $i < count($lines); $i++)
+		{
+			$body .= $lines[$i] . '\n';
+		}
+
+		$body = substr($body, 0, -strlen('\n'));
 
 		return mail($to, $subject, $body, $headers);
 	}

@@ -64,7 +64,7 @@ class FormProcessor
 					if(strpos($field, '()'))
 					{
 						$field = str_replace('()', '', $field);
-						$obj->{$field} = $value;
+						$obj->{$field}($value);
 					}
 					else
 					{
@@ -125,6 +125,32 @@ class FormProcessor
 			$this->setSessionMessage($formName, $this->getError($e));
 
 			return null;
+		}
+	}
+
+	/**
+	 * Авторизация пользователя в системе
+	 *
+	 * @param string $formName название формы
+	 * @param string $obj название класса юзеров
+	 * @param string $method название метода авторизации
+	 * @param string $login логин пользователя
+	 * @param string $password пароль пользователя
+	 * @return bool
+	 */
+	public function auth($formName, $obj, $method, $login, $password)
+	{
+		try
+		{
+			$user = $obj::$method($login, $password);
+
+			return $user;
+		}
+		catch (\Exception $e)
+		{
+			$this->setSessionMessage($formName, $this->getError($e));
+
+			return false;
 		}
 	}
 
