@@ -175,7 +175,7 @@ class MainController extends AbstractController
         {
             $pollVoterDB = new PollVoterDB();
 
-            $pollData = PollDataDB::getAllSortDataByVotersOnPollId($this->request->id);
+            $pollData = PollDataDB::getAllOnPollId($this->request->id);
             $alreadyPoll = PollVoterDB::isAlreadyPoll(array_keys($pollData));
             $checks = array(array($alreadyPoll, false, 'ERROR_ALREADY_POLL'));
 
@@ -195,7 +195,7 @@ class MainController extends AbstractController
         $this->metaDesc = 'Результаты голосования: ' . $pollDB->title . '.';
         $this->metaKey = 'результаты голосования,' . mb_strtolower($pollDB->title);
 
-        $pollDataDB = PollDataDB::getAllOnPollId($this->request->id);
+        $pollDataDB = PollDataDB::getAllSortDataByVotersOnPollId($this->request->id);
         $hornav = $this->getHornav();
         $hornav->addData($pollDB->title);
 

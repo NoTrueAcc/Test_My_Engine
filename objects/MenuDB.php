@@ -18,11 +18,11 @@ use library\database\ObjectDB;
  */
 class MenuDB extends ObjectDB
 {
-    protected static $tableName = 'menu';
+    protected static $table = 'menu';
 
     public function __construct()
     {
-        parent::__construct(self::$tableName);
+        parent::__construct(self::$table);
 
         $this->addProperty('type', 'ValidateId');
         $this->addProperty('title', 'ValidateTitle');
@@ -38,7 +38,7 @@ class MenuDB extends ObjectDB
      */
     public static function getTopMenu()
     {
-        return ObjectDB::getAllOnField(self::$tableName, __CLASS__, 'type', TOP_MENU, 'id');
+        return ObjectDB::getAllOnField(self::$table, __CLASS__, 'type', TOP_MENU, 'id');
     }
 
     /**
@@ -48,6 +48,6 @@ class MenuDB extends ObjectDB
      */
     public static function getMainMenu()
     {
-        return ObjectDB::getAllOnField(self::$tableName, __CLASS__, 'type', MAIN_MENU, 'id');
+        return ObjectDB::getAllOnField(self::$table, __CLASS__, 'type', MAIN_MENU, 'id');
     }
 }

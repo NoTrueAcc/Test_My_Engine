@@ -35,11 +35,11 @@ class AbstractObjectDB
 	private $formatDate = '';
 	private $id = null;
 	private $properties = array();
-	protected static $table = '';
+	protected $tableName = '';
 
 	public function __construct($table, $formatDate)
 	{
-		self::$table = $table;
+		$this->tableName = $table;
 		$this->formatDate = $formatDate;
 	}
 
@@ -69,7 +69,7 @@ class AbstractObjectDB
 		}
 
 		$select = new SelectDB(self::$db);
-		$select->from(self::$table, $this->getSelectFields())
+		$select->from($this->tableName, $this->getSelectFields())
 			->where("`id` = " . self::$db->getSQ(), array($id));
 
 		if(!($propertiesData = self::$db->selectRow($select)))
@@ -150,7 +150,7 @@ class AbstractObjectDB
 		{
 			if($action == self::ACTION_UPDATE)
 			{
-				$success = self::$db->update(self::$table, $propertiesData, '`id` = ' . self::$db->getSQ(), array($this->getId()));
+				$success = self::$db->update($this->tableName, $propertiesData, '`id` = ' . self::$db->getSQ(), array($this->getId()));
 
 				if(!$success)
 				{
@@ -161,7 +161,7 @@ class AbstractObjectDB
 			}
 			elseif ($action == self::ACTION_INSERT)
 			{
-				$success = self::$db->insert(self::$table, $propertiesData);
+				$success = self::$db->insert($this->tableName, $propertiesData);
 
 				if(!$success)
 				{
@@ -192,7 +192,7 @@ class AbstractObjectDB
 			return false;
 		}
 
-		$success = self::$db->delete(self::$table, '`id` = ' . self::$db->getSQ(), array($this->getId()));
+		$success = self::$db->delete($this->tableName, '`id` = ' . self::$db->getSQ(), array($this->getId()));
 
 		if(!$success)
 		{
@@ -584,7 +584,7 @@ class AbstractObjectDB
 		$value = is_array($value) ? $value : array($value);
 
 		$select = new SelectDB(self::$db);
-		$select->from(self::$table, array('*'))
+		$select->from($this->tableName, array('*'))
 			->where("`$field` = " . self::$db->getSQ(), $value);
 
 		if(($data = self::$db->selectRow($select)))
