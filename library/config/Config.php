@@ -26,9 +26,11 @@ class Config
 
 	const DIR_IMG       = 'images/';
 	const DIR_ARTICLES  = 'images/articles/';
-	const DIR_AVATAR    = 'images/avatar/';
+	const DIR_AVATAR    = 'images/avatars/';
 	const DIR_TMPL      = 'templates/';
 	const DIR_EMAIL     = 'templates/email/';
+
+	const VALIDATOR_NAMESPACE = 'validators\\';
 
 	const LAYOUT = 'main';
 

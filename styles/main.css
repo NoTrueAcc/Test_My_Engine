@@ -308,7 +308,7 @@ label{
 	border-radius: 5px;
 }
 
-#subscribe .button, #pool .button{
+#subscribe .button, #poll .button{
 	background-color: #f0b017;
 	border-bottom:2px solid #976c05;
 	border-left:1px solid #976c05;
@@ -339,21 +339,21 @@ label{
 	float:left;
 }
 
-#pool input[type="radio"]{
+#poll input[type="radio"]{
 	display:none;
 }
 
-#pool label{
+#poll label{
 	background: url('../images/radio.png') no-repeat left center;
 	display: inline-block;
 	padding: 0 20px;
 }
 
-#pool input[type="radio"]:checked + label{
+#poll input[type="radio"]:checked + label{
 	background: url('../images/radio_checked.png') no-repeat left center;
 }
 
-#pool{
+#poll{
 	margin-left:10px;
 }
 
@@ -1210,6 +1210,10 @@ footer{
 	margin-left: 237px;
 	margin-top: -5px;
 	width: 65%;
+}
+
+p.message {
+	color: red;
 }
 
 #popup_book #popup_table {

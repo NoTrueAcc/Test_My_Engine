@@ -31,6 +31,6 @@ class Poll extends AbstractModule
 	 */
     public function getTemplateFile()
     {
-        return 'pool';
+        return 'poll';
     }
 }

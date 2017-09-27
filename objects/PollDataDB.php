@@ -46,7 +46,7 @@ class PollDataDB extends ObjectDB
 	 * @param int $pollId айди опроса
 	 * @return array массив объектов вариантов ответа
 	 */
-	public function getAllSortDataByVotersOnPollId($pollId)
+	public static function getAllSortDataByVotersOnPollId($pollId)
 	{
 		$pollDataList = self::getAllOnPollId($pollId);
 

@@ -7,6 +7,7 @@
  */
 
 namespace core\database;
+use library\config\Config;
 
 /**
  * Класс для создания объектов и работы с ними
@@ -312,7 +313,7 @@ class AbstractObjectDB
 	{
 		$date = $date ? $date : time();
 
-		return strftime($this->formatDate, $date);
+		return date($this->formatDate, $date);
 	}
 
 	/**
@@ -735,7 +736,8 @@ class AbstractObjectDB
 
 		foreach ($this->properties as $property => $data)
 		{
-			$validatorsDataList[$property] = new $data['validator']($data['value']);
+		    $validatorClass = Config::VALIDATOR_NAMESPACE . $data['validator'];
+			$validatorsDataList[$property] = new $validatorClass($data['value']);
 		}
 
 		foreach ($validatorsDataList as $property => $validator)
@@ -759,7 +761,10 @@ class AbstractObjectDB
 		}
 		else
 		{
-			throw new \Exception($errors);
+		    foreach ($errors as $error)
+            {
+                throw new \Exception($error[0]);
+            }
 		}
 	}
 }

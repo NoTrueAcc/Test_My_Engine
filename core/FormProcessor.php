@@ -7,6 +7,7 @@
  */
 
 namespace core;
+use core\database\AbstractObjectDB;
 use core\exception\ValidatorException;
 
 
@@ -38,7 +39,7 @@ class FormProcessor
 	 * Сохраняет данные формы и записывает в сессию сообщение
 	 *
 	 * @param string $formName имя формы
-	 * @param Object $obj объект формы
+	 * @param AbstractObjectDB $obj объект формы
 	 * @param array $fieldsDataList  массив дынных формы
 	 * @param array $checks массив эквивалентности
 	 * @param bool $successMessage сообщение об успешной отправке формы

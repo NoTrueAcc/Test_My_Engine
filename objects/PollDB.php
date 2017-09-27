@@ -39,7 +39,7 @@ class PollDB extends ObjectDB
 	{
 		$select = new SelectDB();
 		$select->from(self::$table, '*')
-			->where('state = ', '1')
+			->where('state = ' . self::$db->getSQ(), '1')
 			->orderRand()
 			->limit(1);
 

@@ -208,9 +208,9 @@ class AbstractController extends \core\controller\AbstractController
 		if($pollDB->isSaved())
 		{
 			$poll = new Poll();
-			$poll->action = Url::getUrl('poll', false, array('id' => $pollDB->getId()));
+			$poll->action = Url::getUrl('poll', false, array('id' => $pollDB->id));
 			$poll->title = $pollDB->title;
-			$poll->data = PollDataDB::getAllOnPollId($pollDB->getId());
+			$poll->data = PollDataDB::getAllOnPollId($pollDB->id);
 		}
 		else
 		{

@@ -15,9 +15,13 @@ use modules\Article;
 use modules\Blog;
 use modules\Category;
 use modules\Intro;
+use modules\PollResult;
 use objects\ArticleDB;
 use objects\CategoryDB;
 use objects\CommentDB;
+use objects\PollDataDB;
+use objects\PollDB;
+use objects\PollVoterDB;
 use objects\SectionDB;
 
 class MainController extends AbstractController
@@ -163,5 +167,44 @@ class MainController extends AbstractController
 		$article->comments = CommentDB::getAllOnArticleId($this->request->id);
 
         $this->render($article);
+    }
+
+    public function actionPoll()
+    {
+        if($this->request->poll)
+        {
+            $pollVoterDB = new PollVoterDB();
+
+            $pollData = PollDataDB::getAllSortDataByVotersOnPollId($this->request->id);
+            $alreadyPoll = PollVoterDB::isAlreadyPoll(array_keys($pollData));
+            $checks = array(array($alreadyPoll, false, 'ERROR_ALREADY_POLL'));
+
+            $this->formProcessor->process('poll', $pollVoterDB, array('pollDataId'), $checks, 'SUCCESS_POLL');
+            $this->redirect(Url::currentUrl());
+        }
+
+        $pollDB = new PollDB();
+        $pollDB->loadOnId($this->request->id);
+
+        if(!$pollDB->isSaved())
+        {
+            $this->notFound();
+        }
+
+        $this->title = 'Результаты голосования: ' . $pollDB->title;
+        $this->metaDesc = 'Результаты голосования: ' . $pollDB->title . '.';
+        $this->metaKey = 'результаты голосования,' . mb_strtolower($pollDB->title);
+
+        $pollDataDB = PollDataDB::getAllOnPollId($this->request->id);
+        $hornav = $this->getHornav();
+        $hornav->addData($pollDB->title);
+
+        $pollResult = new PollResult();
+        $pollResult->hornav = $hornav;
+        $pollResult->message = $this->formProcessor->getSessionMessage('poll');
+        $pollResult->title = $pollDB->title;
+        $pollResult->data = $pollDataDB;
+
+        $this->render($pollResult);
     }
 }

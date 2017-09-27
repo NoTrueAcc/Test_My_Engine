@@ -146,7 +146,7 @@ abstract class AbstractDataBase
 			return false;
 		}
 
-		$result = $result->fetch_assoc();
+		$result = ($result->num_rows > 0) ?  $result->fetch_assoc() : array();
 
 		return array_shift($result);
 	}

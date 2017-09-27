@@ -20,6 +20,7 @@ class PollResult extends AbstractModule
     {
         parent::__construct();
         $this->addProperty('title');
+        $this->addProperty('hornav');
         $this->addProperty('message');
         $this->addProperty('data', null, true);
     }
@@ -40,7 +41,14 @@ class PollResult extends AbstractModule
 
         foreach ($this->data as $data)
         {
-            $data->percent = ($data->voters / $countVoters) * 100;
+            if($countVoters != 0)
+            {
+                $data->percent = ($data->voters / $countVoters) * 100;
+            }
+            else
+            {
+                $data->percent = 0;
+            }
         }
     }
 
