@@ -124,7 +124,7 @@ class AbstractController extends \core\controller\AbstractController
 		$header->meta('viewport', 'width=device-width', false);
 		$header->favicon = 'favicon.ico';
 		$header->css = array('styles/main.css', 'styles/prettify.css');
-		$header->js = array('js/jquery.js', 'js/functions.js', 'js/validator.js', 'js/prettify.js');
+		$header->js = array('js/jquery-1.10.2.min.js', 'js/functions.js', 'js/validator.js', 'js/prettify.js', 'js/main.js');
 
 		return $header;
 	}

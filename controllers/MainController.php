@@ -276,9 +276,9 @@ class MainController extends AbstractController
 
 	public function actionSregister()
 	{
-		if(!isset($_COOKIE['sregister']) && !$_COOKIE['sregister'])
+		if(!isset($_COOKIE['sregister']))
 		{
-			$this->redirect(Url::currentUrl());
+			$this->accessDenied();
 		}
 
 		$this->title = 'Регистрация на сайте ' . Config::SITENAME;
@@ -291,7 +291,7 @@ class MainController extends AbstractController
 		$pageMessage = new PageMessage();
 		$pageMessage->hornav = $hornav;
 		$pageMessage->header = 'Регистрация';
-		$pageMessage->text = 'Учетная запись создана. На указанный Вами адрес электронной почты отправлено письмо с инструкцией по активации. Если письмо не доходит, то обратитесь к администрации.';
+		$pageMessage->text = 'Учетная запись создана. На указанный Вами адрес электронной почты отправлено письмо с инструкцией по активации. Если письмо не доходит, то обратитесь к администрации. <br> Данная страница станет недоступна в течении 60 секунд.';
 
 		$this->render($pageMessage);
 	}
@@ -301,6 +301,11 @@ class MainController extends AbstractController
 		$userDB = new UserDB();
 		$userDB->loadOnLogin($this->request->login);
 		$hornav = $this->getHornav();
+
+		if(!$userDB->login || !$this->request->key)
+        {
+            $this->accessDenied();
+        }
 
 		if($userDB->isSaved() && ($userDB->activation == ''))
 		{

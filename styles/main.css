@@ -146,6 +146,19 @@ label{
 	margin:0 10px;
 }
 
+#auth span.message {
+	color: #c8504b;
+	font-size: 80%;
+	border: 1px solid #6f7a80;
+	display: inline-block;
+	position: absolute;
+	background-color: #d5d5d5;
+	padding: 10px;
+	border-radius: 35px 35px 0 35px;
+	right: 542px;
+	top: 38px;
+}
+
 #link_register{
 	float:left;
 	color: #c8504b;
@@ -595,7 +608,7 @@ footer{
 	float: right;
 }
 
-.main div.page_message {
+div.page_message {
 	padding: 5px 0 30px 10px;
 }
 
@@ -1333,8 +1346,8 @@ p.message {
 	#auth .message {
 		font-size: 70%;
 		margin-top: 5px;
+		display: block;
 	}
-
 }
 
 @media screen and (max-width: 768px) {
