@@ -57,6 +57,23 @@ class UserDB extends ObjectDB
 	}
 
 	/**
+	 * Возвращает название аватара пользователя
+	 *
+	 * @return null|string
+	 */
+	public function getAvatar()
+	{
+		$avatar = basename($this->avatar);
+
+		if($avatar != Config::DEFAULT_AVATAR)
+		{
+			return $avatar;
+		}
+
+		return null;
+	}
+
+	/**
 	 * Инициализирует объект по email
 	 *
 	 * @param string $email email
@@ -126,7 +143,7 @@ class UserDB extends ObjectDB
 	 */
 	public static function authUser($login = false, $password = false)
 	{
-		if($login && $password)
+		if($login || $password)
 		{
 			$auth = true;
 		}
@@ -162,7 +179,7 @@ class UserDB extends ObjectDB
 		}
 		else
 		{
-			$checkPassword = $password == $passwordHash;
+			$checkPassword = ($password == $passwordHash);
 		}
 
 		if($passwordHash && $checkPassword)
@@ -190,6 +207,17 @@ class UserDB extends ObjectDB
 	}
 
 	/**
+	 * проверяет соответствие введенного пароля паролю авторизованного пользователя
+	 *
+	 * @param string $password пароль для сравнения
+	 * @return bool
+	 */
+	public function checkPassword($password)
+	{
+		return password_verify($password, $this->password);
+	}
+
+	/**
 	 * Пост инициализация
 	 *
 	 * @return bool
@@ -213,7 +241,7 @@ class UserDB extends ObjectDB
 	 */
 	protected function preValidate()
 	{
-		if($this->avatar == Config::DIR_AVATAR . $this->avatar)
+		if($this->avatar == Config::DIR_AVATAR . Config::DEFAULT_AVATAR)
 		{
 			$this->avatar = null;
 		}

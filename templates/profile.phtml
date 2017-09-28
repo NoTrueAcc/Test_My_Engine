@@ -1,0 +1,17 @@
+<div class="main">
+<?php if (isset($hornav)) { ?><?=$hornav?><?php } ?>
+<div id="profile">
+	<h1>Изменить аватар</h1>
+	<div class="center">
+		<img src="<?=$avatar?>" alt="Аватар" />
+	</div>
+	<div class="avatar_info">
+		<p>Допустимые форматы - <b>GIF</b>, <b>JPG</b>, <b>PNG</b></p>
+		<p>Размер изображения должен быть <b>не более <?=$maxSize?> КБ</b>!</p>
+		<p>Изображение должно быть квадратным (иначе могут не соблюдаться пропорции)!</p>
+	</div>
+	<?=$formAvatar?>
+	<?=$formName?>
+	<?=$formPassword?>
+</div>
+</div>

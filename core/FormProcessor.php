@@ -196,6 +196,32 @@ class FormProcessor
 	}
 
 	/**
+	 * Загружает изображение на сервер
+	 *
+	 * @param string $messageName тип соощения об ошибке
+	 * @param array $file массив данных изображения
+	 * @param string|int $maxSize максимально допустимый размер файла
+	 * @param string $dir директория для сохранения
+	 * @param bool|string $sourceName имя сохраняемого изображения
+	 * @return bool|mixed|string имя сохраненного изображения
+	 */
+	public function uploadImg($messageName, $file, $maxSize, $dir, $sourceName = false)
+	{
+		try
+		{
+			$name = File::uploadImg($file, $maxSize, $dir, false, $sourceName);
+
+			return $name;
+		}
+		catch (\Exception $e)
+		{
+			$this->setSessionMessage($messageName, $this->getError($e));
+
+			return false;
+		}
+	}
+
+	/**
 	 * Возвращает сообщение об ошибке
 	 *
 	 * @param \Exception $e

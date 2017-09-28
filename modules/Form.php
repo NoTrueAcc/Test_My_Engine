@@ -77,15 +77,14 @@ class Form extends AbstractModule
 	}
 
 	/**
-	 * Создает объект типа fileIMG
+	 * Создает объект типа file
 	 *
 	 * @param string $name имя input
 	 * @param string $label имя label
-	 * @param string $img путь к изображению
 	 */
-	public function fileIMG($name, $label, $img)
+	public function file($name, $label)
 	{
-		$this->input($name, 'file_img', $label, $img);
+		$this->input($name, 'file', $label);
 	}
 
 	/**

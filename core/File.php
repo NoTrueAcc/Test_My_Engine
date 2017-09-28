@@ -30,7 +30,7 @@ class File
 	public static function uploadImg(array $file, $maxSize, $dir, $root = false, $sourceName = false)
 	{
 		$badFormats = array('.php', '.phtml', '.php3', '.php4', '.html', '.htm');
-		$imageTypes = array('img/jpg', 'img/jpeg', 'img/gif', 'img/png');
+		$imageTypes = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');
 
 		foreach ($badFormats as $badFormat)
 		{

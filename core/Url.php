@@ -95,7 +95,7 @@ class Url
 		if(isset($routes[2]) && !empty($routes[2]))
 		{
 			$controller = !empty($routes[1]) ? $routes[1] : $controller;
-			$action = $routes[2];
+			$action = ucfirst($routes[2]) . (isset($routes[3]) ? ucfirst($routes[3]) : '');
 		}
 		else
 		{
@@ -103,7 +103,6 @@ class Url
 		}
 
 		$controller = '\controllers\\' . ucfirst($controller);
-		$action = ucfirst($action);
 
 		return array($controller, $action);
 	}

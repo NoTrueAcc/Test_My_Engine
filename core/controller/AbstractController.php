@@ -14,6 +14,7 @@ use core\Message;
 use core\Request;
 use core\View;
 use library\JavaScriptValidator;
+use objects\UserDB;
 
 /**
  * Класс контроллер
@@ -27,6 +28,10 @@ abstract class AbstractController
 	protected $message;
 	protected $request;
 	protected $formProcessor = null;
+
+	/**
+	 * @var UserDB
+	 */
 	protected $authUser = null;
 	protected $jsValidator = null;
 

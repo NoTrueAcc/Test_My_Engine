@@ -24,17 +24,17 @@ class Config
 	const DB_PREFIX 	= 'xyz_';
 	const DB_SYM_QUERY  = '?';
 
-	const DIR_IMG       = 'images/';
-	const DIR_ARTICLES  = 'images/articles/';
-	const DIR_AVATAR    = 'images/avatars/';
-	const DIR_TMPL      = 'templates/';
-	const DIR_EMAIL     = 'templates/emails/';
+	const DIR_IMG       = '/images/';
+	const DIR_ARTICLES  = '/images/articles/';
+	const DIR_AVATAR    = '/images/avatars/';
+	const DIR_TMPL      = __DIR__ . '/../../templates/';
+	const DIR_EMAIL     = __DIR__ . '/../../templates/emails/';
 
 	const VALIDATOR_NAMESPACE = 'validators\\';
 
 	const LAYOUT = 'main';
 
-	const FILE_MESSAGES = 'text/messages.ini';
+	const FILE_MESSAGES = __DIR__ . '/../../text/messages.ini';
 
 	const FORMAT_DATE = 'd.m.Y H:i:s';
 

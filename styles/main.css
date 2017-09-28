@@ -154,9 +154,9 @@ label{
 	position: absolute;
 	background-color: #d5d5d5;
 	padding: 10px;
-	border-radius: 35px 35px 0 35px;
-	right: 542px;
-	top: 38px;
+	border-radius: 100px 100px 0;
+	right: 340px;
+	top: 27px;
 }
 
 #link_register{
@@ -1237,6 +1237,7 @@ div.page_message {
 
 p.message {
 	color: red;
+	text-align: center;
 }
 
 #popup_book #popup_table {

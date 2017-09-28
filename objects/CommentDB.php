@@ -69,11 +69,74 @@ class CommentDB extends ObjectDB
 	}
 
 	/**
+	 * Проверяет права на редактирование
+	 *
+	 * @param UserDB $authUser объект юзера
+	 * @param string $field тип поля
+	 * @return bool
+	 */
+	public function accessEdit($authUser, $type)
+	{
+		if($type == 'text')
+		{
+			return $this->userId == $authUser->id;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Проверяет на возможность удалить комментарий
+	 *
+	 * @param UserDB $authUser объект юзера
+	 * @return bool
+	 */
+	public function accessDelete($authUser)
+	{
+		return $this->userId == $authUser->id;
+	}
+
+	/**
 	 * Формирует ссылку на комментарии
 	 */
 	protected function postInit()
 	{
 		$this->link = Url::getUrl('article', '', array('id', $this->articleId));
 		$this->link = Url::addID($this->link, 'comment_' . $this->getId());
+	}
+
+	/**
+	 * Перед удалением основного комментария удаляет дочерние
+	 *
+	 * @return bool
+	 */
+	protected function preDelete()
+	{
+		$comments = self::getAllOnParentId($this->id);
+
+		foreach ($comments as $comment)
+		{
+			try
+			{
+				$comment->delete();
+			}
+			catch (\Exception $e)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Все статьи по айди родителя
+	 *
+	 * @param string|int $parentId айди родителя
+	 * @return array
+	 */
+	private static function getAllOnParentId($parentId)
+	{
+		return CommentDB::getAllOnField(self::$table, __CLASS__, 'parentId', $parentId);
 	}
 }

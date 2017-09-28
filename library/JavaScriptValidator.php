@@ -146,7 +146,7 @@ class JavaScriptValidator
 	public function avatar()
 	{
 		$newClass = $this->getBaseClass();
-		$newClass->textEmpty = $this->message->getMessage('ERROR_AVATAR_EMPTY');
+		$newClass->textEmpty = $this->message->getMessage('ERROR_IMAGE_EMPTY');
 
 		return $newClass;
 	}

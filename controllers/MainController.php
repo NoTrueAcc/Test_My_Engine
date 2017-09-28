@@ -16,7 +16,6 @@ use modules\Article;
 use modules\Blog;
 use modules\Category;
 use modules\Form;
-use modules\Hornav;
 use modules\Intro;
 use modules\PageMessage;
 use modules\PollResult;

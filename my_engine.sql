@@ -315,7 +315,7 @@ INSERT INTO `xyz_sef` (`id`, `link`, `alias`) VALUES
 (7, '/logout', 'logout'),
 (8, '/remind', 'remind'),
 (9, '/search', 'search'),
-(10, '/user/editprofile', 'user/editprofile'),
+(10, '/user/edit/profile', 'user/edit/profile'),
 (11, '/section?id=1', 'html'),
 (12, '/section?id=2', 'css'),
 (13, '/category?id=1', 'html-osnovy'),

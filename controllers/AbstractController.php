@@ -123,8 +123,8 @@ class AbstractController extends \core\controller\AbstractController
 		$header->meta('keywords', $this->metaKey, false);
 		$header->meta('viewport', 'width=device-width', false);
 		$header->favicon = 'favicon.ico';
-		$header->css = array('styles/main.css', 'styles/prettify.css');
-		$header->js = array('js/jquery-1.10.2.min.js', 'js/functions.js', 'js/validator.js', 'js/prettify.js', 'js/main.js');
+		$header->css = array('/styles/main.css', '/styles/prettify.css');
+		$header->js = array('/js/jquery-1.10.2.min.js', '/js/functions.js', '/js/validator.js', '/js/prettify.js', '/js/main.js');
 
 		return $header;
 	}
@@ -199,7 +199,7 @@ class AbstractController extends \core\controller\AbstractController
 			$userPanel = new UserPanel();
 			$userPanel->user = $this->authUser;
 			$userPanel->uri = $this->activeUri;
-			$userPanel->addItem('Редактировать профиль', Url::getUrl('editprofile', 'user'));
+			$userPanel->addItem('Редактировать профиль', Url::getUrl('edit/profile', 'user'));
 			$userPanel->addItem('Выход', Url::getUrl('logout'));
 		}
 
