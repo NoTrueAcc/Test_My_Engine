@@ -224,7 +224,7 @@ class UserDB extends ObjectDB
      */
     public function hashUserLoginAndEmail()
     {
-        return md5($this->login . $this->email, Config::SECRET);
+        return hash('sha256', $this->login . Config::SECRET . $this->email);
     }
 
 	/**

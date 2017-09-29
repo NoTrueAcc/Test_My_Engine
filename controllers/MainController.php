@@ -352,4 +352,79 @@ class MainController extends AbstractController
 		UserDB::logout();
 		$this->redirect($_SERVER['HTTP_REFERER']);
 	}
+
+	public function actionConfirm()
+	{
+		$this->title = 'Подтверждение изменения email-адреса';
+		$this->metaDesc = 'Подтверждение изменения email-адреса.';
+		$this->metaKey = 'подтверждение изменения email-адреса,изменение email,смена email';
+
+		$pageMessage = new PageMessage();
+		$hornav = $this->getHornav();
+		$hornav->addData('Подтверждение изменения email-адреса');
+
+		if($this->request->login && $this->request->email && $this->request->key)
+		{
+			$userDB = new UserDB();
+			$userDB->loadOnLogin($this->request->login);
+
+			if($userDB->hashUserLoginAndEmail() == $this->request->key)
+			{
+				$oldUser = new UserDB();
+				$oldUser->loadOnEmail($this->request->email);
+
+				$checks = array(array($oldUser->isSaved(), false));
+
+				$userDB = $this->formProcessor->process('', $userDB, array('email', $this->request->email), $checks);
+
+				if($userDB instanceof UserDB)
+				{
+					Url::setCookiePageAccess('sconfirm');
+					$this->redirect('sconfirm');
+				}
+				else
+				{
+					$pageMessage->hornav = $hornav;
+					$pageMessage->header = 'При смене email-адреса произошла ошибка';
+					$pageMessage->text = 'Попробуйте еще раз. При повторении ошибки обратитесь в администратору';
+
+					$this->render($pageMessage);
+				}
+			}
+			else
+			{
+				$pageMessage->hornav = $hornav;
+				$pageMessage->header = 'При смене email-адреса произошла ошибка';
+				$pageMessage->text = 'Попробуйте еще раз. Проверьте корректность введенного адреса. При повторении ошибки обратитесь в администратору';
+
+				$this->render($pageMessage);
+			}
+		}
+		else
+		{
+			$this->accessDenied();
+		}
+	}
+
+	public function actionSconfirm()
+	{
+		if(!isset($_COOKIE['sconfirm']))
+		{
+			$this->accessDenied();
+		}
+
+		$this->title = 'Изменение Email';
+		$this->metaDesc = 'Изменение Email сайте ' . Config::SITENAME . '.';
+		$this->metaKey = 'изменение email сайт ' . mb_strtolower(Config::SITENAME) . ',изменение email успешно';
+
+		$hornav = $this->getHornav();
+		$hornav->addData('Изменение Email');
+
+		$pageMessage = new PageMessage();
+		$pageMessage->hornav = $hornav;
+		$pageMessage->header = 'Изменение Email';
+		$pageMessage->text = 'Ваш Email успешно изменен';
+
+		$this->render($pageMessage);
+	}
 }
