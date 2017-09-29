@@ -217,6 +217,16 @@ class UserDB extends ObjectDB
 		return password_verify($password, $this->password);
 	}
 
+    /**
+     * Хэширует текущие логин и емэил пользователя
+     *
+     * @return string
+     */
+    public function hashUserLoginAndEmail()
+    {
+        return md5($this->login . $this->email, Config::SECRET);
+    }
+
 	/**
 	 * Пост инициализация
 	 *
