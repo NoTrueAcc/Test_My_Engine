@@ -12,7 +12,7 @@ namespace validators;
 use core\validator\AbstractValidator;
 
 /**
- * Класс для проверки email на корректность
+ * Класс для проверки e-mail на корректность
  *
  * Class ValidateEmail
  * @package validator

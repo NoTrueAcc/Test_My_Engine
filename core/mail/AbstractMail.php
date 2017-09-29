@@ -91,7 +91,8 @@ abstract class AbstractMail
 		}
 
 		$body = substr($body, 0, -strlen('\n'));
-
+		echo $body;
+		exit;
 		return mail($to, $subject, $body, $headers);
 	}
 }

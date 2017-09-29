@@ -156,7 +156,8 @@ label{
 	padding: 10px;
 	border-radius: 100px 100px 0;
 	right: 340px;
-	top: 27px;
+	top: 16px;
+	height: 30px;
 }
 
 #link_register{
@@ -718,6 +719,8 @@ div.page_message {
 	color: #565a62;
 	display: block;
 	font-size: 90%;
+	width: 180px;
+
 }
 
 .form input[type="text"], .data input[type="text"], .form input[type="password"], .form textarea, .data textarea, #comments textarea {

@@ -102,7 +102,7 @@ class UserDB extends ObjectDB
 	 */
 	public function login()
 	{
-		if(is_null($this->activation))
+		if(!$this->isActive())
 		{
 			return false;
 		}
@@ -187,7 +187,7 @@ class UserDB extends ObjectDB
 			$user = new UserDB();
 			$user->loadOnLogin($login);
 
-			if($user->activation != '')
+			if(!$user->isActive())
 			{
 				throw new \Exception('ERROR_ACTIVATE_USER');
 			}
@@ -222,10 +222,20 @@ class UserDB extends ObjectDB
      *
      * @return string
      */
-    public function hashUserLoginAndEmail()
+    public function hashUserDataOnEmail($email)
     {
-        return hash('sha256', $this->login . Config::SECRET . $this->email);
+        return hash('sha256', $this->login . Config::SECRET . $email . $this->password);
     }
+
+	/**
+	 * Проверяет активен ли пользователь
+	 *
+	 * @return bool
+	 */
+	public function isActive()
+	{
+		return ($this->activation == '');
+	}
 
 	/**
 	 * Пост инициализация

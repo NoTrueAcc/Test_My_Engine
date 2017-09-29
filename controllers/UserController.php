@@ -24,7 +24,7 @@ class UserController extends AbstractController
 		$messagePassword = "password";
 		$messageEmail = "email";
 
-		if($this->request->change_avatar)
+		if($this->request->changeAvatar)
 		{
 			$img = $this->formProcessor->uploadImg($messageAvatar, $_FILES['avatar'], Config::MAX_SIZE_AVATAR, Config::DIR_AVATAR);
 
@@ -44,7 +44,7 @@ class UserController extends AbstractController
 				}
 			}
 		}
-		elseif ($this->request->change_name)
+		elseif ($this->request->changeName)
 		{
 			$checks = array(array($this->authUser->checkPassword($this->request->passwordCurrentName), true, 'ERROR_PASSWORD_CURRENT'));
 			$user = $this->formProcessor->process($messageName, $this->authUser, array('name'), $checks, 'SUCCESS_NAME_CHANGE');
@@ -54,7 +54,7 @@ class UserController extends AbstractController
 				$this->redirect(Url::currentUrl());
 			}
 		}
-		elseif($this->request->change_password)
+		elseif($this->request->changePassword)
 		{
 			$checks = array(
 				array($this->authUser->checkPassword($this->request->passwordCurrent), true, 'ERROR_PASSWORD_CURRENT'),
@@ -68,7 +68,7 @@ class UserController extends AbstractController
 				$this->redirect(Url::currentUrl());
 			}
 		}
-		elseif($this->request->change_email)
+		elseif($this->request->changeEmail)
         {
 			$userOld = new UserDB();
 			$userOld->loadOnEmail($this->request->email);
@@ -81,9 +81,13 @@ class UserController extends AbstractController
 
             if($user instanceof UserDB)
             {
-                $this->mail->send($user->email, array('user' => $user,
-                    'link' => Url::getUrl('confirm', '', array('login' => $user->login, 'email' => $this->request->email, 'key' => $user->hashUserLoginAndEmail()), false, Config::ADDRESS)),
-                    'change_email');
+                $this->mail->send(
+								$user->email,
+								array(
+								'user' => $user,
+								'link' => Url::getUrl('confirm', '', array('login' => $user->login, 'email' => $this->request->email, 'key' => $user->hashUserDataOnEmail($this->request->email)), false, Config::ADDRESS)),
+								'change_email'
+								);
                 $this->redirect(Url::currentUrl());
             }
         }
@@ -93,7 +97,7 @@ class UserController extends AbstractController
 		$this->meta_key = "редактирование профиля, редактирование профиля пользователя, редактирование профиля пользователя сайт";
 
 		$formAvatar = new Form();
-		$formAvatar->name = 'change_avatar';
+		$formAvatar->name = 'changeAvatar';
 		$formAvatar->action = Url::currentUrl();
 		$formAvatar->enctype = 'multipart/form-data';
 		$formAvatar->message = $this->formProcessor->getSessionMessage($messageAvatar);
@@ -103,7 +107,7 @@ class UserController extends AbstractController
 		$formAvatar->addJSV('avatar', $this->jsValidator->avatar());
 
 		$formName = new Form();
-		$formName->name = 'change_name';
+		$formName->name = 'changeName';
 		$formName->header = 'Изменить имя';
 		$formName->action = Url::currentUrl();
 		$formName->message = $this->formProcessor->getSessionMessage($messageName);
@@ -115,7 +119,7 @@ class UserController extends AbstractController
 		$formName->addJSV('passwordCurrentName', $this->jsValidator->password(false, false, 'ERROR_PASSWORD_CURRENT_EMPTY'));
 
 		$formPassword = new Form();
-		$formPassword->name = 'change_password';
+		$formPassword->name = 'changePassword';
 		$formPassword->header = 'Изменить пароль';
 		$formPassword->action = Url::currentUrl();
 		$formPassword->message = $this->formProcessor->getSessionMessage($messagePassword);
@@ -128,11 +132,11 @@ class UserController extends AbstractController
 		$formPassword->addJSV('passwordCurrent', $this->jsValidator->password(false, false, 'ERROR_PASSWORD_CURRENT_EMPTY'));
 
 		$formEmail = new Form();
-		$formEmail->name = 'change_email';
-		$formEmail->header = 'Изменить Email';
+		$formEmail->name = 'changeEmail';
+		$formEmail->header = 'Изменить e-mail';
 		$formEmail->action = Url::currentUrl();
 		$formEmail->message = $this->formProcessor->getSessionMessage($messageEmail);
-		$formEmail->text('email', 'Новый Email:', $this->authUser->email);
+		$formEmail->text('email', 'Новый e-mail:', $this->authUser->email);
 		$formEmail->password('passwordCurrentEmail', 'Текущий пароль:');
 		$formEmail->submit('Сохранить');
 

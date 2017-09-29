@@ -237,7 +237,9 @@ class MainController extends AbstractController
 
 			if($user instanceof UserDB)
 			{
-				$this->mail->send($user->email, array('user' => $user, 'link' => Url::getUrl('activate', '', array('login' => $user->login, 'key' => $user->activation), false, Config::ADDRESS)), 'register');
+				$this->mail->send($user->email, array('user' => $user,
+					'link' => Url::getUrl('activate', '', array('login' => $user->login, 'key' => $user->activation),
+						false, Config::ADDRESS)), 'register');
 
 				Url::setCookiePageAccess('sregister');
 				$this->redirect(Url::getUrl('sregister'));
@@ -297,54 +299,102 @@ class MainController extends AbstractController
 
 	public function actionActivate()
 	{
-		$userDB = new UserDB();
-		$userDB->loadOnLogin($this->request->login);
-		$hornav = $this->getHornav();
-
-		if(!$userDB->login || !$this->request->key)
-        {
-            $this->accessDenied();
-        }
-
-		if($userDB->isSaved() && ($userDB->activation == ''))
+		if($this->request->activateResend)
 		{
-			$this->title = 'Ваш аккаунт уже активирован!';
-			$this->metaDesc = 'Вы можете войти в ваш аккаунт, используя Ваш логин и пароль.';
-			$this->metaKey = 'активация, успешная активация, успешная активация регистрация';
-			$hornav->addData('Активация');
+			$this->title = 'Подтверждение e-mail';
+			$this->metaDesc = 'Подтверждение e-mail.';
+			$this->metaKey = 'подтверждение e-mail,подтверждение e-mail сайт';
+
+			$hornav = $this->getHornav();
+			$hornav->addData('Подтверждение e-mail');
+
+			$formEmail = new Form();
+			$formEmail->hornav = $hornav;
+			$formEmail->name = 'emailActivate';
+			$formEmail->header = 'Подтверждение e-mail';
+			$formEmail->action = Url::getUrl('activate');
+			$formEmail->message = $this->formProcessor->getSessionMessage('email');
+			$formEmail->text('email', 'Для повторной отправки инструкции по активации введите E-mail, указанный при регистрации:', $this->request->email);
+			$formEmail->submit('Отправить');
+
+			$formEmail->addJSV('email', $this->jsValidator->email());
+
+			$this->render($formEmail);
 		}
-		elseif($userDB->activation != $this->request->key)
+		elseif($this->request->emailActivate)
 		{
-			$this->title = 'Ошибка при активации';
-			$this->metaDesc = 'Неверный код активации, если ошибка будет повторяться, то обратитесь к администратору.';
-			$this->metaKey = 'активация, ошибка активация, ошибка активация регистрация';
-			$hornav->addData('Ошибка активации');
-		}
-		elseif($userDB->isSaved() && ($userDB->activation == $this->request->key))
-		{
-			$userDB->activation = '';
+			$user = new UserDB();
+			$user->loadOnEmail($this->request->email);
 
-			try
+			if($user->isSaved())
 			{
-				$userDB->save();
-			}
-			catch (\Exception $e)
-			{
-				throw new \Exception($e);
-			}
+				try
+				{
+					$this->mail->send($user->email,
+						array('user' => $user, 'link' => Url::getUrl('activate', '', array('login' => $user->login, 'key' => $user->activation), false, Config::ADDRESS)),
+						'register');
 
-			$this->title = "Ваш аккаунт успешно активирован";
-			$this->metaDesc = "Теперь Вы можете войти в свою учётную запись, используя Ваши логин и пароль.";
-			$this->metaKey = "активация, успешная активация, успешная активация регистрация";
-			$hornav->addData("Активация");
+					$this->formProcessor->setSessionMessage('email', 'UNKNOWN_ERROR');
+				}
+				catch (\Exception $e)
+				{
+					$this->formProcessor->setSessionMessage('email', 'UNKNOWN_ERROR');
+
+					$this->redirect(Url::currentUrl());
+				}
+			}
 		}
+		else
+		{
+			$userDB = new UserDB();
+			$userDB->loadOnLogin($this->request->login);
+			$hornav = $this->getHornav();
 
-		$pageMessage = new PageMessage();
-		$pageMessage->hornav = $hornav;
-		$pageMessage->header = $this->title;
-		$pageMessage->text = $this->metaDesc;
+			if(!$userDB->login || !$this->request->key)
+			{
+				$this->accessDenied();
+			}
 
-		$this->render($pageMessage);
+			if($userDB->isSaved() && ($userDB->activation == ''))
+			{
+				$this->title = 'Ваш аккаунт уже активирован!';
+				$this->metaDesc = 'Вы можете войти в ваш аккаунт, используя Ваш логин и пароль.';
+				$this->metaKey = 'активация, успешная активация, успешная активация регистрация';
+				$hornav->addData('Активация');
+			}
+			elseif($userDB->activation != $this->request->key)
+			{
+				$this->title = 'Ошибка при активации';
+				$this->metaDesc = 'Неверный код активации, если ошибка будет повторяться, то обратитесь к администратору.';
+				$this->metaKey = 'активация, ошибка активация, ошибка активация регистрация';
+				$hornav->addData('Ошибка активации');
+			}
+			elseif($userDB->isSaved() && ($userDB->activation === $this->request->key))
+			{
+				$userDB->activation = '';
+
+				try
+				{
+					$userDB->save();
+				}
+				catch (\Exception $e)
+				{
+					throw new \Exception($e);
+				}
+
+				$this->title = "Ваш аккаунт успешно активирован";
+				$this->metaDesc = "Теперь Вы можете войти в свою учётную запись, используя Ваши логин и пароль.";
+				$this->metaKey = "активация, успешная активация, успешная активация регистрация";
+				$hornav->addData("Активация");
+			}
+
+			$pageMessage = new PageMessage();
+			$pageMessage->hornav = $hornav;
+			$pageMessage->header = $this->title;
+			$pageMessage->text = $this->metaDesc;
+
+			$this->render($pageMessage);
+		}
 	}
 
 	public function actionLogout()
@@ -368,16 +418,16 @@ class MainController extends AbstractController
 			$userDB = new UserDB();
 			$userDB->loadOnLogin($this->request->login);
 
-			if($userDB->hashUserLoginAndEmail() == $this->request->key)
+			if($userDB->isSaved() && $userDB->isActive() && ($userDB->hashUserDataOnEmail($this->request->email) == $this->request->key))
 			{
 				$oldUser = new UserDB();
 				$oldUser->loadOnEmail($this->request->email);
 
 				$checks = array(array($oldUser->isSaved(), false));
 
-				$userDB = $this->formProcessor->process('', $userDB, array('email', $this->request->email), $checks);
+				$user = $this->formProcessor->process('', $oldUser, array('email', $this->request->email), $checks);
 
-				if($userDB instanceof UserDB)
+				if($user instanceof UserDB)
 				{
 					Url::setCookiePageAccess('sconfirm');
 					$this->redirect('sconfirm');
@@ -395,7 +445,7 @@ class MainController extends AbstractController
 			{
 				$pageMessage->hornav = $hornav;
 				$pageMessage->header = 'При смене email-адреса произошла ошибка';
-				$pageMessage->text = 'Попробуйте еще раз. Проверьте корректность введенного адреса. При повторении ошибки обратитесь в администратору';
+				$pageMessage->text = 'Проверьте корректность введенного адреса. При повторении ошибки обратитесь в администратору';
 
 				$this->render($pageMessage);
 			}
@@ -413,17 +463,144 @@ class MainController extends AbstractController
 			$this->accessDenied();
 		}
 
-		$this->title = 'Изменение Email';
-		$this->metaDesc = 'Изменение Email сайте ' . Config::SITENAME . '.';
-		$this->metaKey = 'изменение email сайт ' . mb_strtolower(Config::SITENAME) . ',изменение email успешно';
+		$this->title = 'Изменение e-mail';
+		$this->metaDesc = 'Изменение e-mail сайте ' . Config::SITENAME . '.';
+		$this->metaKey = 'изменение e-mail сайт ' . mb_strtolower(Config::SITENAME) . ',изменение email успешно';
 
 		$hornav = $this->getHornav();
-		$hornav->addData('Изменение Email');
+		$hornav->addData('Изменение e-mail');
 
 		$pageMessage = new PageMessage();
 		$pageMessage->hornav = $hornav;
-		$pageMessage->header = 'Изменение Email';
-		$pageMessage->text = 'Ваш Email успешно изменен';
+		$pageMessage->header = 'Изменение e-mail';
+		$pageMessage->text = 'Ваш e-mail успешно изменен';
+
+		$this->render($pageMessage);
+	}
+
+	public function actionReset()
+	{
+		$messageName = 'reset';
+		$this->title = 'Восстановление пароля';
+		$this->metaDesc = "Восстановление пароля пользователя.";
+		$this->metaKey = "восстановление пароля, восстановление пароля пользователя";
+		$hornav = $this->getHornav();
+		$hornav->addData('Восстановление пароля');
+
+		if($this->request->reset && $this->request->email)
+		{
+			$userDB = new UserDB();
+			$userDB->loadOnEmail($this->request->email);
+
+			if($userDB->isSaved() && $userDB->isActive())
+			{
+				$this->mail->send(
+								$this->request->email,
+								array(
+									'user' => $userDB,
+									'link' => Url::getUrl('reset', '', array('email' => $this->request->email, 'key' => $userDB->hashUserDataOnEmail($this->request->email)), false, Config::ADDRESS)),
+									'reset'
+								);
+				$pageMessage = new PageMessage();
+				$pageMessage->hornav = $hornav;
+				$pageMessage->header = 'Восстановление пароля';
+				$pageMessage->text = 'Инструкция по восстановлению пароля выслана на указанный e-mail адрес';
+
+				$this->render($pageMessage);
+			}
+			else
+			{
+				if($userDB->isSaved())
+				{
+					$pageMessage = new PageMessage();
+					$pageMessage->hornav = $hornav;
+					$pageMessage->header = 'Восстановление пароля';
+					$pageMessage->text = 'Ваш e-mail адрес не подтвержден, для продолжения необходимо подтвердить его! Для повторной отправки инструкции по активации пройдите по <a href="' .
+						Url::getUrl('activate', '', array('activateResend' => 'redirect', 'email' => $this->request->email)) . '">ссылке</a>';
+
+					$this->render($pageMessage);
+				}
+				else
+				{
+					$this->formProcessor->setSessionMessage($messageName, 'ERROR_EMAIL_NOT_EXISTS');
+				}
+
+
+				$this->redirect(Url::currentUrl());
+			}
+		}
+		elseif($this->request->email && $this->request->key)
+		{
+			$userDB = new UserDB();
+			$userDB->loadOnEmail($this->request->email);
+
+			if($userDB->isSaved() && $userDB->isActive() && ($userDB->hashUserDataOnEmail($this->request->email) === $this->request->key))
+			{
+				if($this->request->resetPassword)
+				{
+					$checks = array(array($this->request->passwordReset, $this->request->passwordResetConf, 'ERROR_PASSWORD_CONF'));
+					$userDB = $this->formProcessor->process($messageName, $userDB, array(array('setPassword()', $this->request->passwordReset)), $checks);
+
+					if($userDB instanceof UserDB)
+					{
+						$userDB->login();
+
+						$this->redirect(Url::getUrl('sreset'));
+					}
+				}
+
+				$form = new Form();
+				$form->header = 'Восстановление пароля';
+				$form->name = 'resetPassword';
+				$form->action = Url::currentUrl();
+				$form->message = $this->formProcessor->getSessionMessage($messageName);
+				$form->password('passwordReset', 'Новый пароль:');
+				$form->password('passwordResetConf', 'Повторите пароль:');
+				$form->submit('Восстановить');
+
+				$form->addJSV('passwordReset', $this->jsValidator->password('passwordResetConf'));
+
+				$this->render($form);
+			}
+			else
+			{
+				$pageMessage = new PageMessage();
+				$pageMessage->hornav = $hornav;
+				$pageMessage->header = 'Ошибка при восстановлении пароля';
+				$pageMessage->text = 'При восстановлении пароля возникла ошибка, проверьте правильно ли введен адрес и повторите попытку. <br> Если ощибка будет повторяться,- обратитесь к администратору.';
+
+				$this->render($pageMessage);
+			}
+		}
+		else
+		{
+			$form = new Form();
+			$form->hornav = $hornav;
+			$form->header = 'Восстановление пароля';
+			$form->name = 'reset';
+			$form->action = Url::currentUrl();
+			$form->message = $this->formProcessor->getSessionMessage($messageName);
+			$form->text('email', 'Введите e-mail, указанный при регистрации:', $this->request->email);
+			$form->submit('Восстановить');
+			$form->addJSV('email', $this->jsValidator->email());
+
+			$this->render($form);
+		}
+	}
+
+	public function actionSreset()
+	{
+		$this->title = "Восстановление пароля";
+		$this->metaDesc = "Восстановление пароля успешно завершено.";
+		$this->metaKey = "восстановление пароля, восстановление пароля пользователя, восстановление пароля пользователя завершено";
+
+		$hornav = $this->getHornav();
+		$hornav->addData('Восстановление пароля');
+
+		$pageMessage = new PageMessage();
+		$pageMessage->hornav = $hornav;
+		$pageMessage->header = 'Восстановление пароля';
+		$pageMessage->text = "Теперь Вы можете войти на сайт, используя новый пароль, если Вы не авторизовались автоматически.";
 
 		$this->render($pageMessage);
 	}
