@@ -12,11 +12,13 @@ use core\File;
 use core\Url;
 use library\config\Config;
 use modules\Form;
-use modules\PageMessage;
 use objects\UserDB;
 
 class UserController extends AbstractController
 {
+	/**
+	 * страница редактирования профиля
+	 */
 	public function actionEditProfile()
 	{
 		$messageAvatar = "avatar";
@@ -85,7 +87,10 @@ class UserController extends AbstractController
 								$user->email,
 								array(
 								'user' => $user,
-								'link' => Url::getUrl('confirm', '', array('login' => $user->login, 'email' => $this->request->email, 'key' => $user->hashUserDataOnEmail($this->request->email)), false, Config::ADDRESS)),
+								'link' => Url::getUrl('confirm',
+									'',
+									array('login' => $user->login, 'email' => $this->request->email, 'key' => $user->hashUserDataOnEmail($this->request->email)),
+									false, Config::ADDRESS)),
 								'change_email'
 								);
                 $this->redirect(Url::currentUrl());
@@ -146,7 +151,13 @@ class UserController extends AbstractController
 		$hornav = $this->getHornav();
 		$hornav->addData('Редактирование профиля');
 
-		$this->render($this->renderData(array('hornav' => $hornav, 'formAvatar' => $formAvatar, 'formName' => $formName, 'formPassword' => $formPassword, 'formEmail' => $formEmail), 'profile', array('avatar' => $this->authUser->avatar, 'maxSize' =>(Config::MAX_SIZE_AVATAR / KB_B))));
+		$this->render($this->renderData(
+			array('hornav' => $hornav,
+				'formAvatar' => $formAvatar,
+				'formName' => $formName,
+				'formPassword' => $formPassword,
+				'formEmail' => $formEmail),
+			'profile', array('avatar' => $this->authUser->avatar, 'maxSize' =>(Config::MAX_SIZE_AVATAR / KB_B))));
 	}
 
 	protected function access()

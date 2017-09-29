@@ -19,6 +19,7 @@ use modules\Form;
 use modules\Intro;
 use modules\PageMessage;
 use modules\PollResult;
+use modules\SearchResult;
 use objects\ArticleDB;
 use objects\CategoryDB;
 use objects\CommentDB;
@@ -699,5 +700,29 @@ class MainController extends AbstractController
 
 			$this->render($form);
 		}
+	}
+
+	public function actionSearch()
+	{
+		$hornav = $this->getHornav();
+		$hornav->addData('Поиск:');
+		$this->title = 'Поиск: ' . $this->request->query;
+		$this->metaDesc = "Поиск ".$this->request->query.".";
+		$this->metaKey = "поиск, поиск ".$this->request->query;
+
+		$articles = ArticleDB::search($this->request->query);
+		$searchResult = new SearchResult();
+
+		if(mb_strtolower($this->request->query) < Config::MIN_SEARCH_LEN)
+		{
+			$searchResult->errorLen = true;
+		}
+
+		$searchResult->hornav = $hornav;
+		$searchResult->field = 'full';
+		$searchResult->query = $this->request->query;
+		$searchResult->data = $articles;
+
+		$this->render($searchResult);
 	}
 }
