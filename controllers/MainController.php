@@ -30,6 +30,9 @@ use objects\UserDB;
 
 class MainController extends AbstractController
 {
+	/**
+	 * Главная страница
+	 */
 	public function actionIndex()
 	{
 		$this->title = 'Как создать свой сайт';
@@ -46,6 +49,9 @@ class MainController extends AbstractController
 		$this->render($this->renderData(array('blog' => $blog), 'index'));
 	}
 
+	/**
+	 * Страница секции /section
+	 */
 	public function actionSection()
     {
         $sectionDB = new SectionDB();
@@ -83,6 +89,9 @@ class MainController extends AbstractController
         $this->render($intro . $blog);
     }
 
+	/**
+	 * Страница категории
+	 */
 	public function actionCategory()
     {
         $categoryDB = new CategoryDB();
@@ -124,6 +133,9 @@ class MainController extends AbstractController
         $this->render($intro . $category);
     }
 
+	/**
+	 * страница статьи
+	 */
     public function actionArticle()
     {
         $articleDB = new ArticleDB();
@@ -173,6 +185,9 @@ class MainController extends AbstractController
         $this->render($article);
     }
 
+	/**
+	 * страница голосования
+	 */
     public function actionPoll()
     {
         if($this->request->poll)
@@ -212,6 +227,9 @@ class MainController extends AbstractController
         $this->render($pollResult);
     }
 
+	/**
+	 * страница регистрации
+	 */
     public function actionRegister()
 	{
 		$messageName = 'register';
@@ -275,6 +293,9 @@ class MainController extends AbstractController
 		$this->render($form);
 	}
 
+	/**
+	 * страница успешной регистрации
+	 */
 	public function actionSregister()
 	{
 		if(!isset($_COOKIE['sregister']))
@@ -297,6 +318,11 @@ class MainController extends AbstractController
 		$this->render($pageMessage);
 	}
 
+	/**
+	 * страница активации учетки
+	 *
+	 * @throws \Exception
+	 */
 	public function actionActivate()
 	{
 		if($this->request->activateResend)
@@ -397,12 +423,18 @@ class MainController extends AbstractController
 		}
 	}
 
+	/**
+	 * действие выход
+	 */
 	public function actionLogout()
 	{
 		UserDB::logout();
 		$this->redirect($_SERVER['HTTP_REFERER']);
 	}
 
+	/**
+	 * страница изменения e-mail
+	 */
 	public function actionConfirm()
 	{
 		$this->title = 'Подтверждение изменения email-адреса';
@@ -420,12 +452,7 @@ class MainController extends AbstractController
 
 			if($userDB->isSaved() && $userDB->isActive() && ($userDB->hashUserDataOnEmail($this->request->email) == $this->request->key))
 			{
-				$oldUser = new UserDB();
-				$oldUser->loadOnEmail($this->request->email);
-
-				$checks = array(array($oldUser->isSaved(), false));
-
-				$user = $this->formProcessor->process('', $oldUser, array('email', $this->request->email), $checks);
+				$user = $this->formProcessor->process('', $userDB, array('email', $this->request->email),array());
 
 				if($user instanceof UserDB)
 				{
@@ -456,6 +483,9 @@ class MainController extends AbstractController
 		}
 	}
 
+	/**
+	 * страница успешного изменения e-mail
+	 */
 	public function actionSconfirm()
 	{
 		if(!isset($_COOKIE['sconfirm']))
@@ -478,6 +508,9 @@ class MainController extends AbstractController
 		$this->render($pageMessage);
 	}
 
+	/**
+	 * страница восстановления пароля
+	 */
 	public function actionReset()
 	{
 		$messageName = 'reset';
@@ -588,6 +621,9 @@ class MainController extends AbstractController
 		}
 	}
 
+	/**
+	 * страница успешного восстановления пароля
+	 */
 	public function actionSreset()
 	{
 		$this->title = "Восстановление пароля";
@@ -603,5 +639,65 @@ class MainController extends AbstractController
 		$pageMessage->text = "Теперь Вы можете войти на сайт, используя новый пароль, если Вы не авторизовались автоматически.";
 
 		$this->render($pageMessage);
+	}
+
+	/**
+	 * страница восстановления логина
+	 */
+	public function actionRemind()
+	{
+		$messageName = 'remind';
+		$this->title = "Восстановление логина";
+		$this->meta_desc = "Восстановление логина пользователя.";
+		$this->meta_key = "восстановление логина, восстановление логина пользователя";
+		$hornav = $this->getHornav();
+		$hornav->addData('Восстановление логина');
+
+		if($this->request->remind)
+		{
+			$userDB = new UserDB();
+			$userDB->loadOnEmail($this->request->email);
+
+			if($userDB->isSaved() && $userDB->isActive())
+			{
+				$this->mail->send($userDB->email, array("user" => $userDB), "remind");
+
+				$pageMessage = new PageMessage();
+				$pageMessage->header = 'Успешное восстановление логина';
+				$pageMessage->text = 'На Ваш e-mail было выслано письмо с логином.';
+
+				$this->render($pageMessage);
+			}
+			elseif($userDB->isSaved())
+			{
+					$pageMessage = new PageMessage();
+					$pageMessage->hornav = $hornav;
+					$pageMessage->header = 'Восстановление логина';
+					$pageMessage->text = 'Ваш e-mail адрес не подтвержден, для продолжения необходимо подтвердить его! Для повторной отправки инструкции по активации пройдите по <a href="' .
+						Url::getUrl('activate', '', array('activateResend' => 'redirect', 'email' => $this->request->email)) . '">ссылке</a>';
+
+					$this->render($pageMessage);
+			}
+			else
+			{
+				$this->formProcessor->setSessionMessage($messageName, 'ERROR_EMAIL_NOT_EXISTS');
+
+				$this->redirect(Url::currentUrl());
+			}
+		}
+		else
+		{
+			$form = new Form();
+			$form->hornav = $hornav;
+			$form->header = 'Восстановление логина';
+			$form->name = 'remind';
+			$form->action = Url::currentUrl();
+			$form->message = $this->formProcessor->getSessionMessage($messageName);
+			$form->text('email', 'Введите e-mail, указанный при регистрации:', $this->request->email);
+			$form->submit('Восстановить');
+			$form->addJSV('email', $this->jsValidator->email());
+
+			$this->render($form);
+		}
 	}
 }
