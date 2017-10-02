@@ -702,6 +702,9 @@ class MainController extends AbstractController
 		}
 	}
 
+	/**
+	 * Страница поиска
+	 */
 	public function actionSearch()
 	{
 		$hornav = $this->getHornav();
@@ -709,11 +712,11 @@ class MainController extends AbstractController
 		$this->title = 'Поиск: ' . $this->request->query;
 		$this->metaDesc = "Поиск ".$this->request->query.".";
 		$this->metaKey = "поиск, поиск ".$this->request->query;
-
 		$articles = ArticleDB::search($this->request->query);
+
 		$searchResult = new SearchResult();
 
-		if(mb_strtolower($this->request->query) < Config::MIN_SEARCH_LEN)
+		if(strlen(mb_strtolower($this->request->query)) < Config::MIN_SEARCH_LEN)
 		{
 			$searchResult->errorLen = true;
 		}

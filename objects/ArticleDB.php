@@ -190,6 +190,25 @@ class ArticleDB extends ObjectDB
 	}
 
 	/**
+	 * Выполняет запрос поиска и возвращает объекты с необходимыми данными
+	 *
+	 * @param string $words строка запроса
+	 * @return array массив объектов статей по поиску
+	 */
+	public static function search($words)
+	{
+		$select = self::getBaseSelect();
+		$articles = self::searchObjects($select, __CLASS__, array('title', 'full'), $words, Config::MIN_SEARCH_LEN);
+
+		foreach ($articles as $article)
+		{
+			$article->setSectionAndCategory();
+		}
+
+		return $articles;
+	}
+
+	/**
 	 * Пост инициализация
 	 *
 	 * @return bool
@@ -232,7 +251,7 @@ class ArticleDB extends ObjectDB
 	 */
 	private function postHandling()
 	{
-		$this->getSectionAndCategory();
+		$this->setSectionAndCategory();
 		$this->countComments = CommentDB::getCountOnArticleId($this->id);
 		$this->dayShow = ObjectDB::getDay($this->date);
 		$this->monthShow = ObjectDB::getMonth($this->date);
@@ -243,7 +262,7 @@ class ArticleDB extends ObjectDB
 	/**
 	 * Добавляет объекты секции и категории по айди
 	 */
-	private function getSectionAndCategory()
+	private function setSectionAndCategory()
 	{
 		if(isset($this->sectionId))
 		{
@@ -258,12 +277,12 @@ class ArticleDB extends ObjectDB
 
 		if(isset($this->catId))
 		{
-			$section = new CategoryDB();
-			$section->loadOnId($this->catId);
+			$category = new CategoryDB();
+			$category->loadOnId($this->catId);
 
-			if($section->isSaved())
+			if($category->isSaved())
 			{
-				$this->section = $section;
+				$this->category = $category;
 			}
 		}
 	}

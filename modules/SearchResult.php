@@ -20,6 +20,7 @@ class SearchResult extends AbstractModule
     public function __construct()
     {
         parent::__construct();
+        $this->addProperty('hornav');
         $this->addProperty('query');
         $this->addProperty('field');
         $this->addProperty('errorLen', false);
@@ -51,6 +52,13 @@ class SearchResult extends AbstractModule
         return 'search_result';
     }
 
+	/**
+	 * Описание результатов поиска
+	 *
+	 * @param string $text текст в котором ищем максимальное количество вхождений строки поиска на определенном промежутке
+	 * @param string $query строка поиска
+	 * @return mixed Описание результатов поиска
+	 */
     private function getDescription($text, $query)
     {
 		$len = Config::LEN_SEARCH_RES;
@@ -176,6 +184,13 @@ class SearchResult extends AbstractModule
 		return $this->selectSearchWords($description, $query);
 	}
 
+	/**
+	 * Выделяет найденные слова в описании поиска
+	 *
+	 * @param string $description описание поиска
+	 * @param string $query строка запроса
+	 * @return mixed
+	 */
 	private function selectSearchWords($description, $query)
 	{
 		$arrayWords = explode(" ", $query);

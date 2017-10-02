@@ -9,6 +9,7 @@
 namespace core\database;
 use library\config\Config;
 use library\database\ObjectDB;
+use objects\ArticleDB;
 
 /**
  * Класс для создания объектов и работы с ними
@@ -547,13 +548,17 @@ class AbstractObjectDB
 	}
 
     /**
-     * @param $select
-     * @param $class
-     * @param $fields
-     * @param $words
-     * @param $minLen
+	 * Ищет по словам в запросе и возвращает результат в виде массива объектов
+	 *
+     * @param SelectDB $select объект класса SelectDB
+     * @param string $class название класса объетов поиска
+     * @param array $fields поля по которым производим поимк
+     * @param string $words слова запроса поиска
+     * @param int|string $minLen минимальное количество символов в слове запроса
+	 *
+	 * @return array массив объектов с данными
      */
-	protected static function sarchObjects($select, $class, $fields, $words, $minLen)
+	protected static function searchObjects($select, $class, $fields, $words, $minLen)
     {
         $words = mb_strtolower($words);
         $words = preg_replace('/ {2, }/', ' ', $words);
@@ -568,7 +573,7 @@ class AbstractObjectDB
 
         foreach ($wordsArray as $word)
         {
-            if($word >= $minLen)
+            if(strlen($word) >= $minLen)
             {
                 $goodWords[] = $word;
             }
@@ -578,10 +583,6 @@ class AbstractObjectDB
         {
             return array();
         }
-
-        $select = new SelectDB(self::$db);
-        $select->from($class::$table, '*');
-
 
         foreach ($goodWords as $word)
         {
@@ -596,7 +597,7 @@ class AbstractObjectDB
                 $where .= (($i + 1) != count($fields)) ? ' OR ' : '';
             }
 
-            $select->where("($where)", $params);
+            $select->where($where, $params);
         }
 
         $results = self::$db->select($select);
@@ -607,13 +608,14 @@ class AbstractObjectDB
         }
 
         $results = ObjectDB::buildMultiple($class, $results);
+
         $resultSearch = array();
 
         foreach($results as $result)
         {
             for($i = 0; $i < count($fields); $i++)
             {
-                $result->fields[$i] = mb_strtolower(strip_tags($result->fields[$i]));
+                $result->{$fields[$i]} = mb_strtolower(strip_tags($result->{$fields[$i]}));
             }
 
             $resultSearch[$result->id] = $result;
@@ -848,20 +850,35 @@ class AbstractObjectDB
 		}
 	}
 
+	/**
+	 * Сравнение элементов массива объектов
+	 *
+	 * @param $value1
+	 * @param $value2
+	 * @return bool
+	 */
 	private static function compareRelevant($value1, $value2)
     {
         return $value1->relevant < $value2->relevant;
     }
 
-    private static function getRelevantForSearch($result, $fields, array $goodWords)
+	/**
+	 * Количество вхождений слов поиска в полях объекта
+	 *
+	 * @param AbstractObjectDB $result объект с данными
+ 	 * @param array $fields массив полей по которым проводим поиск
+	 * @param array $arrayWords массив слов для поиска
+	 * @return int количество вхождений по полям
+	 */
+    private static function getRelevantForSearch($result, $fields, array $arrayWords)
     {
         $relevant = 0;
 
         for($i = 0; $i < count($fields); $i++)
         {
-            for($j = 0; $j < count($goodWords); $j++)
+            for($j = 0; $j < count($arrayWords); $j++)
             {
-                $relevant += substr($result->fields[$i], $goodWords[$j]);
+                $relevant += substr_count($result->{$fields[$i]}, $arrayWords[$j]);
             }
         }
 
