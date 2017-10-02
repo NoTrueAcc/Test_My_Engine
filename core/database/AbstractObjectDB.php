@@ -8,6 +8,7 @@
 
 namespace core\database;
 use library\config\Config;
+use library\database\ObjectDB;
 
 /**
  * Класс для создания объектов и работы с ними
@@ -545,6 +546,85 @@ class AbstractObjectDB
 		return $objectsDataList;
 	}
 
+    /**
+     * @param $select
+     * @param $class
+     * @param $fields
+     * @param $words
+     * @param $minLen
+     */
+	protected static function sarchObjects($select, $class, $fields, $words, $minLen)
+    {
+        $words = mb_strtolower($words);
+        $words = preg_replace('/ {2, }/', ' ', $words);
+
+        if($words == '')
+        {
+            return array();
+        }
+
+        $wordsArray = explode(' ', $words);
+        $goodWords = array();
+
+        foreach ($wordsArray as $word)
+        {
+            if($word >= $minLen)
+            {
+                $goodWords[] = $word;
+            }
+        }
+
+        if(!count($goodWords))
+        {
+            return array();
+        }
+
+        $select = new SelectDB(self::$db);
+        $select->from($class::$table, '*');
+
+
+        foreach ($goodWords as $word)
+        {
+            $where = '';
+            $params = array();
+
+            for($i = 0; $i < count($fields); $i++)
+            {
+                $where .= '`' . $fields[$i] . '` LIKE ' . self::$db->getSQ();
+                $params[] = "%$word%";
+
+                $where .= (($i + 1) != count($fields)) ? ' OR ' : '';
+            }
+
+            $select->where("($where)", $params);
+        }
+
+        $results = self::$db->select($select);
+
+        if(!$results)
+        {
+            return array();
+        }
+
+        $results = ObjectDB::buildMultiple($class, $results);
+        $resultSearch = array();
+
+        foreach($results as $result)
+        {
+            for($i = 0; $i < count($fields); $i++)
+            {
+                $result->fields[$i] = mb_strtolower(strip_tags($result->fields[$i]));
+            }
+
+            $resultSearch[$result->id] = $result;
+            $resultSearch[$result->id]->relevant = self::getRelevantForSearch($result, $fields, $goodWords);
+        }
+
+        uasort($resultSearch, array('core\database\AbstractObjectDB', 'compareRelevant'));
+
+        return $resultSearch;
+    }
+
 	/**
 	 * Получаем значение свойства. Может быть большая вложенность.
 	 *
@@ -767,4 +847,24 @@ class AbstractObjectDB
             }
 		}
 	}
+
+	private static function compareRelevant($value1, $value2)
+    {
+        return $value1->relevant < $value2->relevant;
+    }
+
+    private static function getRelevantForSearch($result, $fields, array $goodWords)
+    {
+        $relevant = 0;
+
+        for($i = 0; $i < count($fields); $i++)
+        {
+            for($j = 0; $j < count($goodWords); $j++)
+            {
+                $relevant += substr($result->fields[$i], $goodWords[$j]);
+            }
+        }
+
+        return $relevant;
+    }
 }
