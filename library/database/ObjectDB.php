@@ -39,4 +39,24 @@ class ObjectDB extends AbstractObjectDB
 
 		return self::$months[date('n', $date) - 1];
 	}
+
+	public function preEdit($field, $value)
+    {
+        return true;
+    }
+
+    public function postEdit($field, $value)
+    {
+        return true;
+    }
+
+    public function accessEdit($authUser, $field)
+    {
+        return false;
+    }
+
+    public function accessDelete($authUser)
+    {
+        return false;
+    }
 }

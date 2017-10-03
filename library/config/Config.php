@@ -17,6 +17,8 @@ class Config
 	const ADM_NAME  = 'Alex';
 	const ADM_EMAIL = 'coooooller@mail.ru';
 
+	const API_KEY = 'ASDADSS97DSALKJJ';
+
 	const DB_HOST 		= 'localhost';
 	const DB_USER 		= 'root';
 	const DB_PASSWORD 	= 'root';

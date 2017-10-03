@@ -19,4 +19,44 @@ $(document).ready(function() {
 	}
 	$("a[rel='external']").attr("target", "_blank");
 	prettyPrint();
+
+	$('.captcha img:first-child').bind('click', function(event){
+		var captcha = $('.captcha img:last-child');
+		var src = captcha.attr('src');
+
+		if((i = src.indexOf('?')) == -1)
+		{
+			src += '?' + Math.random();
+		}
+		else
+		{
+			src = src.substring(0, i) + '?' + Math.random();
+		}
+
+		captcha.attr('src', src);
+	});
+	
+	$(document).click('#comment_cancel span', function (event) {
+		commentCancel();
+    });
+
+
 });
+
+function commentCancel()
+{
+	if(tmp_comment)
+	{
+		successEditComment(true);
+	}
+
+	closeFormComment();
+}
+
+function closeFormComment()
+{
+	$('#form_add_comment #parent_id').val(0);
+	$('#form_add_comment #text_comment').val('');
+	$('#form_add_comment #comment_id').val(0);
+	$('#form_add_comment').css('display', 'none');
+}

@@ -10,6 +10,7 @@ namespace objects;
 
 
 use core\Url;
+use library\config\Config;
 use library\database\ObjectDB;
 use library\database\SelectDB;
 
@@ -101,7 +102,7 @@ class CommentDB extends ObjectDB
 	 */
 	protected function postInit()
 	{
-		$this->link = Url::getUrl('article', '', array('id', $this->articleId));
+		$this->link = Url::getUrl('article', '', array('id', $this->articleId), false, Config::ADDRESS);
 		$this->link = Url::addID($this->link, 'comment_' . $this->getId());
 	}
 
@@ -135,7 +136,7 @@ class CommentDB extends ObjectDB
 	 * @param string|int $parentId айди родителя
 	 * @return array
 	 */
-	private static function getAllOnParentId($parentId)
+	private static function  getAllOnParentId($parentId)
 	{
 		return CommentDB::getAllOnField(self::$table, __CLASS__, 'parentId', $parentId);
 	}

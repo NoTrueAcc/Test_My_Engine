@@ -29,7 +29,7 @@ class ValidateTitle extends AbstractValidator
         {
             $this->setError(self::CODE_EMPTY);
         }
-        else
+        elseif(strlen($this->data) > self::MAX_LEN)
         {
             $this->setError(self::CODE_MAX_LEN);
         }
