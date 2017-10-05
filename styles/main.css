@@ -658,6 +658,16 @@ div.page_message {
 	color: #c00;
 }
 
+.block .button, #comments input[type="button"] {
+	background-color: #8ab71b;
+	border-radius: 8px;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	padding: 3px 15px;
+	text-decoration: none;
+}
+
 #form_add_comment {
 	display: none;
 }

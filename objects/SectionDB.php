@@ -34,21 +34,6 @@ class SectionDB extends ObjectDB
 		$this->addProperty('metaKey', 'ValidateMetaKey');
 	}
 
-	public function accessEdit($authUser, $field)
-    {
-        if($field == 'title')
-        {
-            return false;
-        }
-
-        return false;
-    }
-
-    public function accessDelete($authUser)
-    {
-        return false;
-    }
-
     /**
 	 * Формирует ссылку на статью
 	 */

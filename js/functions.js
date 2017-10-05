@@ -20,7 +20,7 @@ $(document).ready(function() {
 	$("a[rel='external']").attr("target", "_blank");
 	prettyPrint();
 
-	$('.captcha img:first-child').bind('click', function(event){
+	$('.captcha img:first-child').bind('click', function(){
 		var captcha = $('.captcha img:last-child');
 		var src = captcha.attr('src');
 
@@ -36,16 +36,16 @@ $(document).ready(function() {
 		captcha.attr('src', src);
 	});
 	
-	$('#comment_cancel span').click(function (event) {
+	$(document).on('click', '#comment_cancel span', function () {
 		commentCancel();
     });
 
-	$('#add_comment').click(function () {
+	$(document).on('click','#add_comment', function () {
 		commentCancel();
 		showFormComment();
     });
 
-	$('#comments .reply_comment').click(function (event) {
+	$(document).on('click','#comments .reply_comment', function (event) {
 		commentCancel();
 
 		var parent_id = $(event.target).parents('div').get(0).id;
@@ -54,12 +54,60 @@ $(document).ready(function() {
 		showFormComment();
     });
 
-	$('#form_add_comment .button').click(function (event) {
-		if($('#form_add_comment textarea').val)
-    })
+	$(document).on('click','#comments .edit_comment', function (event) {
+		commentCancel();
+		var parent_id = $(event.target).parents('div').get(0).id;
+		tmp_comment = $('#' + parent_id).clone();
+		$('#form_add_comment #comment_id').val(parent_id.substring('comment_'.length));
+		var temp = $('#' + parent_id + ' .text').html();
+		temp = temp.replace(/&lt;/g, "<");
+		temp = temp.replace(/&gt;/g, ">");
+		temp = temp.replace(/&amp;/g, "&");
+		$('#form_add_comment #text_comment').val(temp);
+		$('#' + parent_id).replaceWith($('#form_add_comment'));
+		showFormComment();
+	});
+
+	$(document).on('click', '#comments .delete_comment', function (event) {
+		commentCancel();
+
+		if(confirm('Вы уверены, что хотите удалить комментарий?'))
+		{
+			var comment_id = $(event.target).parents('div').get(0).id.substr('comment_'.length);
+			tmp_id = comment_id;
+			var query = 'func=delete&obj=comment&id=' + comment_id;
+			ajax(query, error, successDeleteComment);
+		}
+	});
+
+	$(document).on('click','#form_add_comment .button', function () {
+		if($('#form_add_comment textarea').val())
+		{
+			var query;
+			var comment_id = $('#comment_id').val();
+			var text_comment = $('#text_comment').val();
+
+			if(comment_id != 0)
+			{
+				query = 'func=edit&obj=comment&name=text_' + comment_id + '&value=' + encodeURIComponent(text_comment);
+				ajax(query, error, successEditComment);
+			}
+			else
+			{
+				var parent_id = $('#parent_id').val();
+				var article_id = $('#article_id').val();
+				query = 'func=add_comment&parentId=' + parent_id + '&articleId=' + article_id + '&text=' + encodeURIComponent(text_comment);
+				ajax(query, error, successAddComment);
+			}
+		}
+		else
+		{
+			alert('Вы не ввели текст комментария!');
+		}
+    });
 });
 
-function getTemplateComment(id, user_id, name, avatar, text, date)
+function getTemplateComment(id, name, avatar, text, date)
 {
 	var str = '<div class="comment" id="comment_' + id + '">';
     str += '<img src="' + avatar + '" alt="' + name + '" />';
@@ -68,8 +116,8 @@ function getTemplateComment(id, user_id, name, avatar, text, date)
 	str += '<p class="text">' + text + '</p>';
 	str += '<div class="clear"></div>';
 	str += '<p class = "functions">' +
-		'<span class="reply_comment">Ответить</span>' +
-		'<span class="edit_comment">Редактировать</span>' +
+		'<span class="reply_comment">Ответить</span> ' +
+		'<span class="edit_comment">Редактировать</span> ' +
 		'<span class="delete_comment">Удалить</span>';
 	str += '</div>';
 
@@ -100,7 +148,7 @@ function closeFormComment()
 	$('#form_add_comment').css('display', 'none');
 }
 
-function ajax(data, func_error, func_sucess)
+function ajax(data, func_error, func_success)
 {
 	$.ajax({
 		url: '/api.php',
@@ -110,7 +158,70 @@ function ajax(data, func_error, func_sucess)
 		error: func_error,
 		success: function(result){
 			result = $.parseJSON(result);
-			func_sucess(result);
+			func_success(result);
 		}
 	});
+}
+
+function error()
+{
+	alert('Произошла ошибка! Попробуйте позже.');
+}
+
+function successAddComment(data)
+{
+	data = data['r'];
+	data = JSON.parse(data);
+	var comment = getTemplateComment(data.id, data.name, data.avatar, data.text, data.date);
+
+	if(data.parentId != 0)
+	{
+		$('#form_add_comment').appendTo('#comments');
+		$('#comment_' + data.parentId).append(comment);
+	}
+	else
+	{
+		$('#form_add_comment').before(comment);
+	}
+
+	closeFormComment();
+}
+
+function successEditComment(data)
+{
+	if(data['r'])
+	{
+		$(tmp_comment).find('.text').html(data['r']);
+	}
+
+	if(data)
+	{
+		var form = $('#form_add_comment').clone();
+		$('#form_add_comment').replaceWith($(tmp_comment));
+		tmp_comment = null;
+		$(form).appendTo('#comments');
+	}
+	else
+	{
+		error();
+	}
+
+	closeFormComment();
+}
+
+function successDeleteComment(data)
+{
+	if(data['r'])
+	{
+		var comment = $('#comment_' + tmp_id);
+		comment.fadeOut(500, function(){
+			comment.remove();
+			$('#count_comments').text($('.comment').length);
+			tmp_id = 0;
+		});
+	}
+	else
+	{
+		error();
+	}
 }

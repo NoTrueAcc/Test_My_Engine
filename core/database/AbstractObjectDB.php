@@ -170,7 +170,7 @@ class AbstractObjectDB
 					throw new \Exception();
 				}
 
-				return $this->postInsert();
+				return $this->postInsert($success);
 			}
 			else
 			{
@@ -759,7 +759,7 @@ class AbstractObjectDB
 		return true;
 	}
 
-	protected function postInsert()
+	protected function postInsert($success = false)
 	{
 		return true;
 	}

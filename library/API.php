@@ -14,6 +14,12 @@ use library\mail\Mail;
 use objects\CommentDB;
 use objects\UserDB;
 
+/**
+ * Класс для обработки данных через js запросы
+ *
+ * Class API
+ * @package library
+ */
 class API
 {
     private $mail;
@@ -34,13 +40,16 @@ class API
     }
 
     /**
-     * @param $obj
-     * @param $value
-     * @param $name
-     * @param $type
+	 * Редактирование записи
+	 *
+     * @param string $obj название объекта БД для обработки
+     * @param string $value значение для записи в свойство объекта
+     * @param string $name имя для изменения (должно передаваться в виде name_id, например section_13)
+	 * @param string $type тип переданных данных, для последующей обработки
      */
     public function edit($obj, $value, $name, $type)
     {
+		$obj = ucfirst(mb_strtolower($obj));
         $class = 'objects\\' . $obj . 'DB';
         $obj = new $class;
         preg_match_all('/(.+?)_(\d+)/i', $name, $matches);
@@ -90,8 +99,16 @@ class API
         return false;
     }
 
+	/**
+	 * Удаление записи
+	 *
+	 * @param string $obj название объекта БД для обработки
+	 * @param string|int $id идентификатор
+	 * @return bool
+	 */
     public function delete($obj, $id)
     {
+		$obj = ucfirst(mb_strtolower($obj));
         $class = 'objects\\' . $obj . 'DB';
         $obj = new $class;
         $obj->loadOnId($id);
@@ -116,7 +133,15 @@ class API
         return false;
     }
 
-    public function addComment($parentId, $articleId, $text)
+	/**
+	 * Добавление комментария
+	 *
+	 * @param string|int $parentId идентификатор родительского комментария
+	 * @param string|int $articleId идентификатор статьи
+	 * @param string $text текст комментария
+	 * @return bool|string
+	 */
+	public function addComment($parentId, $articleId, $text)
     {
         if(!$this->authUser)
         {
@@ -124,14 +149,16 @@ class API
         }
 
         $comment = new CommentDB();
-        $comment->user = $this->authUser->id;
+        $comment->userId = $this->authUser->id;
         $comment->parentId = $parentId;
         $comment->articleId = $articleId;
         $comment->text = $text;
 
         try
         {
-            if(!$comment->save())
+			$commentId = $comment->save();
+
+            if(!$commentId)
             {
                 throw new \Exception();
             }
@@ -146,7 +173,7 @@ class API
                 $this->mail->send($user->email, array('user' => $user, 'link' => $commentParent->link), 'comment_subscribe');
             }
 
-            return json_encode(array('id' => $comment->id,
+            return json_encode(array('id' => $commentId,
                                 'parentId' => $comment->parentId,
                                 'userId' => $this->authUser->id,
                                 'name' => $this->authUser->name,

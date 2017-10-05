@@ -338,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `xyz_users` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `login` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
-  `password` varchar(32) NOT NULL,
+  `password` varchar(64) NOT NULL,
   `name` varchar(255) NOT NULL,
   `avatar` varchar(255) DEFAULT NULL,
   `dateReg` int(10) unsigned NOT NULL,

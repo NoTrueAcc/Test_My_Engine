@@ -130,6 +130,11 @@ class CommentDB extends ObjectDB
 		return true;
 	}
 
+	protected function postInsert($success = false)
+	{
+		return $success;
+	}
+
 	/**
 	 * Все статьи по айди родителя
 	 *
