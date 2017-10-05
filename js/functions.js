@@ -225,3 +225,22 @@ function successDeleteComment(data)
 		error();
 	}
 }
+
+function getSocialNetwork(f, t, u) {
+	if (!t) t=document.title;
+	if (!u) u=location.href;
+	t = encodeURIComponent(t);
+	u = encodeURIComponent(u);
+	var s = new Array(
+		'http://www.facebook.com/sharer.php?u='+u+'&t='+t+'" title="Поделиться в Facebook"',
+		'http://vkontakte.ru/share.php?url='+u+'" title="Поделиться В Контакте"',
+		'http://www.odnoklassniki.ru/dk?st.cmd=addShare&st._surl='+u+'&title='+t+'" title="Добавить в Одноклассники"',
+		'http://twitter.com/share?text='+t+'&url='+u+'" title="Добавить в Twitter"',
+		'http://connect.mail.ru/share?url='+u+'&title='+t+'" title="Поделиться в Моем Мире@Mail.Ru"',
+		'http://www.google.com/buzz/post?message='+t+'&url='+u+'" title="Добавить в Google Buzz"',
+		'http://www.livejournal.com/update.bml?event='+u+'&subject='+t+'" title="Опубликовать в LiveJournal"',
+		'http://www.friendfeed.com/share?title='+t+' - '+u+'" title="Добавить в FriendFeed"'
+	);
+	for(i = 0; i < s.length; i++)
+		document.write('<a rel="nofollow" style="display:inline-block;width:32px;height:32px;margin:0 7px 0 0;background:url('+f+'icons.png) -'+32*i+'px 0" href="'+s[i]+'" target="_blank"></a>');
+}
