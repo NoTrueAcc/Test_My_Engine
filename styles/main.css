@@ -24,11 +24,17 @@ header{
 	padding: 15px 20px 0;
 }
 
-header h1 {
-	color: #fff;
+header #main_logo a {
+	position: absolute;
 	float: left;
-	font-size: 210%;
-	margin:0;
+	display: block;
+	width: 225px;
+	height: 60px;
+	background-image: url("/images/logo/header_logo.png");
+	background-repeat: no-repeat;
+	background-position: 50% 60%;
+	background-size: cover;
+	top: 0px;
 }
 
 label{
