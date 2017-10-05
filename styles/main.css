@@ -610,8 +610,8 @@ footer{
 
 #share {
 	font-weight: bold;
-	margin: -55px;
-	width: 40%;
+	margin: -60px 0 0 0;
+	width: 50%;
 	float: right;
 }
 

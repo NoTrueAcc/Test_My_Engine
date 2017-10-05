@@ -94,7 +94,12 @@ class CommentDB extends ObjectDB
 	 */
 	public function accessDelete($authUser)
 	{
-		return $this->userId == $authUser ? $authUser->id : null;
+	    if(!$authUser)
+        {
+            return false;
+        }
+
+		return $this->userId == $authUser->id;
 	}
 
 	/**
