@@ -78,7 +78,7 @@ class CommentDB extends ObjectDB
 	 */
 	public function accessEdit($authUser, $type)
 	{
-		if($type == 'text')
+		if($type == 'text' && $authUser)
 		{
 			return $this->userId == $authUser->id;
 		}
@@ -94,7 +94,7 @@ class CommentDB extends ObjectDB
 	 */
 	public function accessDelete($authUser)
 	{
-		return $this->userId == $authUser->id;
+		return $this->userId == $authUser ? $authUser->id : null;
 	}
 
 	/**
