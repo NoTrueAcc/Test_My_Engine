@@ -76,12 +76,14 @@ abstract class AbstractMail
 	 */
 	public function send($to, array $data, $template)
 	{
-		$from = "=?utf-8?B?" . base64_encode($this->fromName) . "?="." <" . $this->from . ">";
-		$headers = "From: " . $from . "\r\nReply-To: " . $from . "\r\nContent-type: " . $this->type . "; charset=\"" . $this->encoding . "\"\r\n";
+		$headers = "MIME-Version: 1.0" . PHP_EOL;
+		$headers .= "Content-Type: " . $this->type . "; charset=" . $this->encoding . PHP_EOL;
+		$headers .= 'From: =?UTF-8?B?' . base64_encode($this->fromName) . '?= <' . $this->from . '>' . PHP_EOL;
+
 		$text = $this->view->render($template, $data, true);
 		$lines = preg_split('/\\r\\n|\\n/', $text);
 		$subject = $lines[0];
-		$subject = '?=utf-8?B?' . base64_encode($subject) . '?=';
+		$subject = '=?UTF-8?B?' . base64_encode($subject) . '?=';
 		$body = '';
 
 		for($i = 1; $i < count($lines); $i++)
@@ -93,7 +95,7 @@ abstract class AbstractMail
 
 		if ($this->type = "text/html")
 		{
-			$body = nl2br($body);
+			$body = str_replace('\n', '<br>', $body);
 		}
 
 		return mail($to, $subject, $body, $headers);
