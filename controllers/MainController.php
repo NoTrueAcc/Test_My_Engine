@@ -326,6 +326,11 @@ class MainController extends AbstractController
 	 */
 	public function actionActivate()
 	{
+		if($this->authUser)
+		{
+			$this->redirect(Url::getUrl(''));
+		}
+
 		if($this->request->activateResend)
 		{
 			$this->title = 'Подтверждение e-mail';
@@ -361,19 +366,7 @@ class MainController extends AbstractController
 						array('user' => $user, 'link' => Url::getUrl('activate', '', array('login' => $user->login, 'key' => $user->activation), false, Config::ADDRESS)),
 						'register');
 
-					$this->title = 'Подтверждение e-mail';
-					$this->metaDesc = 'Подтверждение e-mail.';
-					$this->metaKey = 'подтверждение e-mail,подтверждение e-mail сайт';
-
-					$hornav = $this->getHornav();
-					$hornav->addData('Подтверждение e-mail');
-
-					$pageMessage = new PageMessage();
-					$pageMessage->hornav = $hornav;
-					$pageMessage->header = 'Подтверждение e-mail';
-					$pageMessage->text = 'На Ваш email было выслано письмо с инструкцией по активации учетной записи. Если этого не произошло обратитесь к администратору.';
-
-					$this->render($pageMessage);
+					$this->redirect(Url::getUrl('sactivate'));
 				}
 				catch (\Exception $e)
 				{
@@ -436,12 +429,36 @@ class MainController extends AbstractController
 		}
 	}
 
+	public function actionSactivate()
+	{
+
+		$this->title = 'Подтверждение e-mail';
+		$this->metaDesc = 'Подтверждение e-mail.';
+		$this->metaKey = 'подтверждение e-mail,подтверждение e-mail сайт';
+
+		$hornav = $this->getHornav();
+		$hornav->addData('Подтверждение e-mail');
+
+		$pageMessage = new PageMessage();
+		$pageMessage->hornav = $hornav;
+		$pageMessage->header = 'Подтверждение e-mail';
+		$pageMessage->text = 'На Ваш email было выслано письмо с инструкцией по активации учетной записи. Если этого не произошло обратитесь к администратору.';
+
+		$this->render($pageMessage);
+	}
+
 	/**
 	 * действие выход
 	 */
 	public function actionLogout()
 	{
 		UserDB::logout();
+
+		if(preg_match('/\/user\//i', $_SERVER['HTTP_REFERER']))
+		{
+			$this->redirect(Url::getUrl(''));
+		}
+
 		$this->redirect($_SERVER['HTTP_REFERER']);
 	}
 
