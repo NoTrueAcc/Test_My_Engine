@@ -361,7 +361,19 @@ class MainController extends AbstractController
 						array('user' => $user, 'link' => Url::getUrl('activate', '', array('login' => $user->login, 'key' => $user->activation), false, Config::ADDRESS)),
 						'register');
 
-					$this->formProcessor->setSessionMessage('email', 'UNKNOWN_ERROR');
+					$this->title = 'Подтверждение e-mail';
+					$this->metaDesc = 'Подтверждение e-mail.';
+					$this->metaKey = 'подтверждение e-mail,подтверждение e-mail сайт';
+
+					$hornav = $this->getHornav();
+					$hornav->addData('Подтверждение e-mail');
+
+					$pageMessage = new PageMessage();
+					$pageMessage->hornav = $hornav;
+					$pageMessage->header = 'Подтверждение e-mail';
+					$pageMessage->text = 'На Ваш email было выслано письмо с инструкцией по активации учетной записи. Если этого не произошло обратитесь к администратору.';
+
+					$this->render($pageMessage);
 				}
 				catch (\Exception $e)
 				{
