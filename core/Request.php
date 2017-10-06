@@ -16,7 +16,7 @@ namespace core;
  */
 class Request
 {
-    private static $sefData;
+    private static $sefData = array();
 	private $data;
 
 	public function __construct()

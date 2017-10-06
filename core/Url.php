@@ -96,14 +96,14 @@ class Url
 
 		if(!$uri)
         {
-            return array('Main', '404');
+            return array('controllers\Main', '404');
         }
 
-		//$routes =  preg_replace('/^(.*)?\?(.*)/i', '$1', $uri);
-        preg_match_all('/^(.*)?\?(.*)/i', $uri, $routes);
-        Request::addSefData($routes[2]);
+		$routes = array_pad(explode('?', $uri), 2, '');
+		parse_str($routes[1], $params);
+		Request::addSefData($params);
 
-		$routes = explode('/', $routes[1]);
+		$routes = isset($routes[0]) ? explode('/', $routes[0]) : array();
 		$controller = 'main';
 		$action = 'index';
 
@@ -223,6 +223,13 @@ class Url
 		setcookie($pageName, true, time() + $lifeTime);
 	}
 
+	/**
+	 * Пост обработчик. Преобразует в ЧПУ ссылки
+	 *
+	 * @param string $uri раздел
+	 * @param string $address адрес сайта
+	 * @return string ЧПУ ссылка
+	 */
 	private static function postHandler($uri, $address = '')
     {
         return SEF::replaceSef($uri, $address);

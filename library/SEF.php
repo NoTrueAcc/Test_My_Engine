@@ -28,9 +28,9 @@ class SEF
             return $address . $link;
         }
 
-        if(preg_match('/^\/\?page=(\d+)$/i', $link, $matches))
+        if(preg_match('/^\/\?page=(\d*)$/i', $link, $matches))
         {
-            return Config::ADDRESS . '/page-' . $matches[1] . Config::SEF_SUFFIX;
+            return Config::ADDRESS . '/page-' . $matches[1];
         }
 
         $alias = SefDB::getAliasOnLink($link);

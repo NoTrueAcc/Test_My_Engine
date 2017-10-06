@@ -45,8 +45,8 @@ class SefDB extends ObjectDB
     public static function getLinkOnAlias($alias)
     {
         $select = new SelectDB();
-        $select->from(self::$table, 'link')
-            ->where('alias = ' . self::$db->getSQ(), $alias);
+        $select->from(self::$table, '`link`')
+            ->where('`alias` = ' . self::$db->getSQ(), $alias);
 
         return self::$db->selectCell($select);
     }

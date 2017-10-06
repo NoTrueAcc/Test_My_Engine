@@ -216,7 +216,7 @@ class ArticleDB extends ObjectDB
 	protected function postInit()
 	{
 		$this->img = !is_null($this->img) ? Config::DIR_ARTICLES . $this->img : null;
-		$this->link = Url::getUrl('article', false, array('id' => $this->id));
+		$this->link = Url::getUrl('article', false, array('id' => $this->id), true, '', true);
 
 		return true;
 	}
