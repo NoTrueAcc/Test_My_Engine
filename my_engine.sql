@@ -160,14 +160,14 @@ CREATE TABLE IF NOT EXISTS `xyz_menu` (
 
 INSERT INTO `xyz_menu` (`id`, `type`, `title`, `link`, `parentId`, `external`) VALUES
 (1, 1, 'Главная', '/', NULL, 0),
-(2, 1, 'HTML', '/section?id=1', NULL, 0),
-(3, 1, 'CSS', '/section?id=2', NULL, 0),
-(4, 1, 'HTML Основы', '/category?id=1', 2, 0),
-(5, 1, 'HTML 5', '/category?id=2', 2, 0),
-(6, 1, 'CSS Основы', '/category?id=3', 3, 0),
+(2, 1, 'HTML', '/html.html', NULL, 0),
+(3, 1, 'CSS', '/css.html', NULL, 0),
+(4, 1, 'HTML Основы', '/html-osnovy.html', 2, 0),
+(5, 1, 'HTML 5', '/html-5.html', 2, 0),
+(6, 1, 'CSS Основы', '/css-osnovy.html', 3, 0),
 (7, 2, 'Главная', '/', NULL, 0),
-(8, 2, 'Служба поддержки', 'http://support.myrusakov.ru', NULL, 1),
-(9, 2, 'Мой Блог', 'http://blog.myrusakov.ru', NULL, 1);
+(8, 2, 'Служба поддержки', '/', NULL, 1),
+(9, 2, 'Мой Блог', '/', NULL, 1);
 
 -- --------------------------------------------------------
 
