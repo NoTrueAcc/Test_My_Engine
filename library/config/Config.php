@@ -24,7 +24,9 @@ class Config
 	const DB_PASSWORD 	= 'root';
 	const DB_NAME 		= 'my_engine';
 	const DB_PREFIX 	= 'xyz_';
-	const DB_SYM_QUERY  = '?';
+    const DB_SYM_QUERY  = '?';
+
+    const SEF_SUFFIX = '.html';
 
 	const DIR_IMG       = '/images/';
 	const DIR_ARTICLES  = '/images/articles/';

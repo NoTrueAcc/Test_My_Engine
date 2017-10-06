@@ -8,6 +8,8 @@
 
 namespace core;
 
+use library\SEF;
+
 /**
  * Класс для работы со ссылками
  *
@@ -26,7 +28,7 @@ class Url
 	 * @param string $address адрес
 	 * @return string
 	 */
-	public static function getUrl($action, $controller = false, $data = array(), $amp = true, $address = '')
+	public static function getUrl($action, $controller = false, $data = array(), $amp = true, $address = '', $handler = false)
 	{
 		$amp = $amp ? '&amp;' : '&';
 		$uri = $controller ? "/$controller/$action" : "/$action";
@@ -42,6 +44,11 @@ class Url
 
 			$uri = mb_substr($uri, 0, -mb_strlen($amp));
 		}
+
+		if($handler)
+        {
+            return self::postHandler($uri, $address);
+        }
 
 		return self::getAbsoluteAddress($address, $uri);
 	}
@@ -85,10 +92,18 @@ class Url
 	public static function getControllerAndAction()
 	{
 		$uri = $_SERVER['REQUEST_URI'];
+		$uri = SEF::getRequest($uri);
 
-		$routes =  preg_replace('/^(.*)?\?.*/i', '$1', $uri);
-		$routes = explode('/', $routes);
+		if(!$uri)
+        {
+            return array('Main', '404');
+        }
 
+		//$routes =  preg_replace('/^(.*)?\?(.*)/i', '$1', $uri);
+        preg_match_all('/^(.*)?\?(.*)/i', $uri, $routes);
+        Request::addSefData($routes[2]);
+
+		$routes = explode('/', $routes[1]);
 		$controller = 'main';
 		$action = 'index';
 
@@ -145,7 +160,7 @@ class Url
 		$amp = $amp ? '&amp;' : '&';
 		$url .= strpos($url, '?') ? $amp . "$name=$value" : "?$name=$value";
 
-		return $url;
+		return self::postHandler($url);
 	}
 
 	/**
@@ -183,7 +198,7 @@ class Url
 			$url = $urlPart;
 		}
 
-		return $url;
+		return self::postHandler($url);
 	}
 
 	/**
@@ -207,4 +222,9 @@ class Url
 	{
 		setcookie($pageName, true, time() + $lifeTime);
 	}
+
+	private static function postHandler($uri, $address = '')
+    {
+        return SEF::replaceSef($uri, $address);
+    }
 }

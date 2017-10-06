@@ -16,12 +16,18 @@ namespace core;
  */
 class Request
 {
+    private static $sefData;
 	private $data;
 
 	public function __construct()
 	{
-		$this->data = $this->xss($_REQUEST);
+		$this->data = $this->xss(array_merge($_REQUEST, self::$sefData));
 	}
+
+	public static function addSefData($sefData)
+    {
+        self::$sefData = $sefData;
+    }
 
 	/**
 	 * Возвращает данные по имени
