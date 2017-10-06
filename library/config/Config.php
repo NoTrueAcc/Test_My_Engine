@@ -15,7 +15,7 @@ class Config
 	const SECRET    = 'dasdaDS4d';
 	const ADDRESS   = 'http://alextest.local';
 	const ADM_NAME  = 'Alex';
-	const ADM_EMAIL = 'coooooller@mail.ru';
+	const ADM_EMAIL = 'cooller@mail.ru';
 
 	const API_KEY = 'ASDADSS97DSALKJJ';
 
