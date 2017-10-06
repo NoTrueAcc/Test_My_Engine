@@ -81,7 +81,6 @@ abstract class AbstractMail
 		$text = $this->view->render($template, $data, true);
 		$lines = preg_split('/\\r\\n|\\n/', $text);
 		$subject = $lines[0];
-		unset($lines[0]);
 		$subject = '?=utf-8?B?' . base64_encode($subject) . '?=';
 		$body = '';
 
@@ -91,6 +90,11 @@ abstract class AbstractMail
 		}
 
 		$body = substr($body, 0, -strlen('\n'));
+
+		if ($this->type = "text/html")
+		{
+			$body = nl2br($body);
+		}
 
 		return mail($to, $subject, $body, $headers);
 	}
