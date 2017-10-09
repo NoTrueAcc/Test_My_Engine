@@ -2,6 +2,8 @@ var tmp_id = 0;
 var tmp_comment = null;
 
 $(document).ready(function() {
+	setInterval(updateChat, 3000);
+
 	var w = $(window).width();
 	if (w <= 768) {
 		var left = $("#left");
@@ -116,9 +118,9 @@ $(document).ready(function() {
 		else
 		{
 			var query = 'func=add_chat_message&text=' + encodeURIComponent(message);
-			ajax(query, error, successAddChatMessage)
+			ajax(query, error, updateChat)
 		}
-	})
+	});
 });
 
 function getTemplateComment(id, name, avatar, text, date)
@@ -247,15 +249,26 @@ function successDeleteComment(data)
 	}
 }
 
-function successAddChatMessage(data)
+function updateChat()
+{
+	var query = 'func=update_chat';
+	ajax(query, error, updateChatMessages);
+}
+
+function updateChatMessages(data)
 {
 	data = data['r'];
 	data = JSON.parse(data);
-	var message = getTemplateChatMessage(data.date, data.name, data.message);
+	var lastMessage = $('#chat_messages p:last-child span:first-child').html();
 
-	$('#chat_send textarea').val('');
-	$(message).appendTo('#chat_messages');
-	$('#chat_messages').scrollTop(99999);
+	for(var i = 0; i < data.length; i++)
+	{
+		if(data[i].date > lastMessage)
+		{
+			var newMessage = getTemplateChatMessage(data[i].date, data[i].name, data[i].message);
+			$(newMessage).appendTo('#chat_messages');
+		}
+	}
 }
 
 function getSocialNetwork(f, t, u) {

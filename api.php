@@ -26,6 +26,9 @@ switch ($request->func)
     case 'add_chat_message' :
         $result = $api->addChatMessage($request->text);
         break;
+	case 'update_chat' :
+		$result = $api->getChatMessages();
+		break;
 }
 
 if($result !== false)
