@@ -2,6 +2,14 @@
     <?=$hornav?>
     <h1>Чат пользователей</h1>
     <div id="user_chat">
-        <input type="button" name="send_message" id="send_message" value="Отправить сообщение">
+		<div id="chat_messages">
+			<?php for($i = 0; $i < count($messages); $i++) { ?>
+					<p class="chat_message"><span><?=$messages[$i]['date']?></span><span> <?=$messages[$i]['name']?>: </span><?=$messages[$i]['message']?></p>
+			<?php } ?>
+		</div>
+		<div id="chat_send">
+			<textarea></textarea>
+        	<input type="button" name="send_message" id="send_message" value="Отправить сообщение">
+		</div>
     </div>
 </div>

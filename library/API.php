@@ -10,6 +10,7 @@ namespace library;
 
 
 use core\database\AbstractObjectDB;
+use core\File;
 use library\mail\Mail;
 use objects\CommentDB;
 use objects\UserDB;
@@ -186,4 +187,23 @@ class API
             return false;
         }
     }
+
+    public function addChatMessage($message)
+	{
+		if(!$this->authUser)
+		{
+			return false;
+		}
+
+		try
+		{
+			$chatMessageData = File::saveChatMessage($message, $this->authUser->name);
+
+			return json_encode($chatMessageData);
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
+	}
 }

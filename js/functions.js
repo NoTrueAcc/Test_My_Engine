@@ -105,6 +105,20 @@ $(document).ready(function() {
 			alert('Вы не ввели текст комментария!');
 		}
     });
+
+	$('#send_message').click(function () {
+		var message = $('#chat_send textarea').val();
+
+		if(message.length < 1)
+		{
+			alert('Вы не ввели текст сообщения!');
+		}
+		else
+		{
+			var query = 'func=add_chat_message&text=' + encodeURIComponent(message);
+			ajax(query, error, successAddChatMessage)
+		}
+	})
 });
 
 function getTemplateComment(id, name, avatar, text, date)
@@ -120,6 +134,13 @@ function getTemplateComment(id, name, avatar, text, date)
 		'<span class="edit_comment">Редактировать</span> ' +
 		'<span class="delete_comment">Удалить</span>';
 	str += '</div>';
+
+	return str;
+}
+
+function getTemplateChatMessage(date, name, message)
+{
+	var str = "<p class=\"chat_message\"><span>" + date + "</span><span> " + name + ": </span>" + message + "</p>";
 
 	return str;
 }
@@ -224,6 +245,17 @@ function successDeleteComment(data)
 	{
 		error();
 	}
+}
+
+function successAddChatMessage(data)
+{
+	data = data['r'];
+	data = JSON.parse(data);
+	var message = getTemplateChatMessage(data.date, data.name, data.message);
+
+	$('#chat_send textarea').val('');
+	$(message).appendTo('#chat_messages');
+	$('#chat_messages').scrollTop(99999);
 }
 
 function getSocialNetwork(f, t, u) {

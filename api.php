@@ -23,6 +23,9 @@ switch ($request->func)
     case 'add_comment' :
         $result = $api->addComment($request->parentId, $request->articleId, $request->text);
         break;
+    case 'add_chat_message' :
+        $result = $api->addChatMessage($request->text);
+        break;
 }
 
 if($result !== false)

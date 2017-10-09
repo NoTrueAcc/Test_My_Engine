@@ -624,22 +624,73 @@ footer{
 	padding: 20px;
 	border-radius: 20px;
 	text-align: left;
+	margin-bottom: 20px;
+
 }
 
-#user_chat #send_message {
-	background-color: #8ab71b;
+#user_chat textarea, #user_chat #send_message {
 	border-bottom:2px solid #628903;
 	border-left:1px solid #71980f;
 	border-right:1px solid #71980f;
 	border-top:2px solid #71980f;
 	font-size:90%;
-	border-radius: 8px;
+	margin: 0;
+}
+
+#user_chat textarea {
+	width: 403px;
+	resize: none;
+	border-radius: 8px 0 0 8px;
+	height: 26px;
+	padding: 5px;
+}
+
+#user_chat #send_message {
+	background-color: #8ab71b;
+	border-radius: 0 8px 8px 0;
 	color: #fff;
 	cursor: pointer;
 	display: inline-block;
 	padding: 3px 15px;
 	text-decoration: none;
 	text-align: left;
+	float: right;
+	height: 40px;
+}
+
+#user_chat #chat_send {
+	margin-top: 10px;
+	position: relative;
+}
+
+#user_chat #chat_messages {
+	height: 440px;
+	overflow-y: scroll;
+	word-break: break-all;
+	padding: 0 10px 0 0;
+	font-size: 90%;
+}
+
+#user_chat #chat_messages p {
+	margin: 7px 0;
+}
+
+#user_chat #chat_messages p:nth-child(odd) {
+	color: #688e0a;
+}
+
+#user_chat #chat_messages p span:first-child {
+	color: #000066;
+}
+
+#user_chat #chat_messages p span:nth-child(2) {
+	color: #976c05;
+	font-weight: bold;
+}
+
+#user_chat #chat_messages p {
+	color: #660000;
+	font-weight: bold;
 }
 
 div.page_message {

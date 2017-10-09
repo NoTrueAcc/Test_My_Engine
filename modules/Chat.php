@@ -9,6 +9,8 @@
 namespace modules;
 
 
+use core\File;
+
 class Chat extends AbstractModule
 {
     public function __construct()
@@ -16,7 +18,7 @@ class Chat extends AbstractModule
         parent::__construct();
 
         $this->addProperty('hornav');
-
+		$this->addProperty('messages', File::getChatMessages(), true);
     }
 
     public function getTemplateFile()
