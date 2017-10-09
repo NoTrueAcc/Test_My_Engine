@@ -206,4 +206,18 @@ class API
 			return false;
 		}
 	}
+
+	public function getChatMessages()
+	{
+		try
+		{
+			$chatMessageData = File::getChatMessages();
+
+			return json_encode($chatMessageData);
+		}
+		catch (\Exception $e)
+		{
+			return false;
+		}
+	}
 }

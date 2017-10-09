@@ -117,6 +117,7 @@ $(document).ready(function() {
 		}
 		else
 		{
+			$('#chat_send textarea').val('');
 			var query = 'func=add_chat_message&text=' + encodeURIComponent(message);
 			ajax(query, error, updateChat)
 		}
@@ -263,10 +264,11 @@ function updateChatMessages(data)
 
 	for(var i = 0; i < data.length; i++)
 	{
-		if(data[i].date > lastMessage)
+		if(!lastMessage || (data[i].date > lastMessage))
 		{
 			var newMessage = getTemplateChatMessage(data[i].date, data[i].name, data[i].message);
 			$(newMessage).appendTo('#chat_messages');
+			$('#chat_messages').scrollTop(99999);
 		}
 	}
 }
