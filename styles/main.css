@@ -615,6 +615,33 @@ footer{
 	float: right;
 }
 
+#user_chat {
+	background-color: #bde1f0;
+	width: 600px;
+	height: 500px;
+	margin: 0 auto;
+	border: 1px solid #2c567e;
+	padding: 20px;
+	border-radius: 20px;
+	text-align: left;
+}
+
+#user_chat #send_message {
+	background-color: #8ab71b;
+	border-bottom:2px solid #628903;
+	border-left:1px solid #71980f;
+	border-right:1px solid #71980f;
+	border-top:2px solid #71980f;
+	font-size:90%;
+	border-radius: 8px;
+	color: #fff;
+	cursor: pointer;
+	display: inline-block;
+	padding: 3px 15px;
+	text-decoration: none;
+	text-align: left;
+}
+
 div.page_message {
 	padding: 5px 0 30px 10px;
 }
@@ -1823,5 +1850,4 @@ div.more_articles {
 	.main .article_img {
 		width: 65px;
 	}
-
 }
