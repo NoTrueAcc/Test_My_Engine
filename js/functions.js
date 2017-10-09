@@ -279,25 +279,30 @@ function updateChatMessages(data)
 {
 	data = data['r'];
 	data = JSON.parse(data);
-	var lastMessage = $('#chat_messages p:last-child span:first-child').html();
-	var lastName = $('#chat_messages p:last-child span:last-child').html();
-	var lastColor = $('#chat_messages p:last-child').css('color');
 
 	for(var i = 0; i < data.length; i++)
 	{
+		var lastMessage = $('#chat_messages p:last-child span:first-child').html();
+		var lastName = $('#chat_messages p:last-child span:last-child').html();
+		var lastColor = $('#chat_messages p:last-child').css('color');
+
 		if(!lastMessage || (data[i].date > lastMessage))
 		{
 			var newMessage = getTemplateChatMessage(data[i].date, data[i].name, data[i].message);
 
 			$(newMessage).appendTo('#chat_messages');
 
-			if(!lastName || (data[i].name == lastName.slice(0, -2).trim()))
+			if(!lastName)
+			{
+				$('#chat_messages p:last-child').css('color', '#BDBDBD');
+			}
+			else if((data[i].name != lastName.slice(0, -2).trim()))
 			{
 				$('#chat_messages p:last-child').css('color', '#660000');
 			}
 			else
 			{
-				$('#chat_messages p:last-child').css('color', '#688e0a');
+				$('#chat_messages p:last-child').css('color', lastColor);
 			}
 
 			$('#chat_messages').scrollTop(99999);

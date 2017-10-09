@@ -675,10 +675,6 @@ footer{
 	margin: 7px 0;
 }
 
-#user_chat #chat_messages p:nth-child(odd) {
-	color: #688e0a;
-}
-
 #user_chat #chat_messages p span:first-child {
 	color: #000066;
 }
@@ -689,7 +685,6 @@ footer{
 }
 
 #user_chat #chat_messages p {
-	color: #660000;
 	font-weight: bold;
 }
 
