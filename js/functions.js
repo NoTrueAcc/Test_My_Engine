@@ -3,6 +3,7 @@ var tmp_comment = null;
 
 $(document).ready(function() {
 	setInterval(updateChat, 3000);
+	$('#chat_messages').scrollTop(99999);
 
 	var w = $(window).width();
 	if (w <= 768) {
@@ -120,6 +121,24 @@ $(document).ready(function() {
 			$('#chat_send textarea').val('');
 			var query = 'func=add_chat_message&text=' + encodeURIComponent(message);
 			ajax(query, error, updateChat)
+		}
+	});
+
+	$('#chat_send textarea').on('keyup', function (event) {
+		if(event.keyCode == 13)
+		{
+			var message = $('#chat_send textarea').val();
+
+			if(message.length < 1)
+			{
+				alert('Вы не ввели текст сообщения!');
+			}
+			else
+			{
+				$('#chat_send textarea').val('');
+				var query = 'func=add_chat_message&text=' + encodeURIComponent(message);
+				ajax(query, error, updateChat)
+			}
 		}
 	});
 });
@@ -261,13 +280,26 @@ function updateChatMessages(data)
 	data = data['r'];
 	data = JSON.parse(data);
 	var lastMessage = $('#chat_messages p:last-child span:first-child').html();
+	var lastName = $('#chat_messages p:last-child span:last-child').html();
+	var lastColor = $('#chat_messages p:last-child').css('color');
 
 	for(var i = 0; i < data.length; i++)
 	{
 		if(!lastMessage || (data[i].date > lastMessage))
 		{
 			var newMessage = getTemplateChatMessage(data[i].date, data[i].name, data[i].message);
+
 			$(newMessage).appendTo('#chat_messages');
+
+			if(!lastName || (data[i].name == lastName.slice(0, -2).trim()))
+			{
+				$('#chat_messages p:last-child').css('color', '#660000');
+			}
+			else
+			{
+				$('#chat_messages p:last-child').css('color', '#688e0a');
+			}
+
 			$('#chat_messages').scrollTop(99999);
 		}
 	}
