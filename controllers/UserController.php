@@ -13,6 +13,7 @@ use core\Url;
 use library\config\Config;
 use modules\Chat;
 use modules\Form;
+use objects\SmileDB;
 use objects\UserDB;
 
 class UserController extends AbstractController
@@ -172,6 +173,8 @@ class UserController extends AbstractController
 
         $chat = new Chat();
         $chat->hornav = $hornav;
+		$chat->smiles = SmileDB::getAllSmiles();
+
 
         $this->render($chat);
 

@@ -618,14 +618,13 @@ footer{
 #user_chat {
 	background-color: #bde1f0;
 	width: 600px;
-	height: 500px;
+	min-height: 500px;
 	margin: 0 auto;
 	border: 1px solid #2c567e;
 	padding: 20px;
 	border-radius: 20px;
 	text-align: left;
 	margin-bottom: 20px;
-
 }
 
 #user_chat textarea, #user_chat #send_message {
@@ -668,6 +667,11 @@ footer{
 	word-break: break-all;
 	padding: 0 10px 0 0;
 	font-size: 90%;
+}
+
+#user_chat #chat_messages p img{
+	width: 30px;
+	vertical-align: middle;
 }
 
 #user_chat #chat_messages p {

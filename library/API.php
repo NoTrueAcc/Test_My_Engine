@@ -13,6 +13,7 @@ use core\database\AbstractObjectDB;
 use core\File;
 use library\mail\Mail;
 use objects\CommentDB;
+use objects\SmileDB;
 use objects\UserDB;
 
 /**
@@ -215,6 +216,7 @@ class API
 
 			foreach ($chatMessageData as $key => $messageData)
 			{
+				$chatMessageData[$key]['message'] = self::setSmilesInMessage($chatMessageData[$key]['message']);
 				$userId = $chatMessageData[$key]['userId'];
 				unset($chatMessageData[$key]['userId']);
 				$myComment = ($this->authUser->id == $userId);
@@ -227,5 +229,18 @@ class API
 		{
 			return false;
 		}
+	}
+
+	private static function setSmilesInMessage($message)
+	{
+		$smiles = SmileDB::getAllSmiles();
+
+		foreach ($smiles as $smile)
+		{
+			$smile->img = '<img src="' . $smile->img . '" alt="">';
+			$message = str_replace($smile->code, $smile->img, $message);
+		}
+
+		return $message;
 	}
 }

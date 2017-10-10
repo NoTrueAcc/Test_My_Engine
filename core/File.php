@@ -143,7 +143,7 @@ class File
 			$fp[$key] = preg_replace("/\\n$/i", '', $fp[$key]);
 		}
 
-		$newMessage = date('d-m-Y H:i:s', time()) . '\&/' . $name . '\&/' . htmlspecialchars($chatMessage) . '\&/' . $userId;
+		$newMessage = date('H:i:s', time()) . '\&/' . $name . '\&/' . htmlspecialchars($chatMessage) . '\&/' . $userId;
 		$newMessage = str_replace(array("\r\n", "\r", "\n"), ' ', strip_tags($newMessage));
 
 		array_push($fp, $newMessage);
@@ -152,7 +152,7 @@ class File
 		fclose($file);
 
 		return array(
-			'date' => date('d-m-Y H:i:s', time()),
+			'date' => date('H:i:s', time()),
 			'name' => $name,
 			'message' =>$chatMessage
 		);

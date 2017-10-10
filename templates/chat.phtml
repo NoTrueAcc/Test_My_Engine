@@ -6,6 +6,14 @@
 		<div id="chat_send">
 			<textarea></textarea>
         	<input type="button" name="send_message" id="send_message" value="Отправить сообщение">
+			<div id="smiles">
+				<?php foreach ($smiles as $smile) { ?>
+					<span class="smile">
+						<img src="<?=$smile->img?>" alt="<?=$smile->title?>">
+						<input type="hidden" value="<?=$smile->code?>">
+					</span>
+				<?php } ?>
+			</div>
 		</div>
     </div>
 </div>

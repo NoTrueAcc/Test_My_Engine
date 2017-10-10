@@ -19,6 +19,7 @@ class Chat extends AbstractModule
 
         $this->addProperty('hornav');
 		$this->addProperty('messages', File::getChatMessages(), true);
+		$this->addProperty('smiles', null, true);
     }
 
     public function getTemplateFile()
