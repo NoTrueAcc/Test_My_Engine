@@ -661,6 +661,11 @@ footer{
 	position: relative;
 }
 
+#chat_send #smiles span.smile img{
+	width: 50px;
+	cursor: pointer;
+}
+
 #user_chat #chat_messages {
 	height: 440px;
 	overflow-y: scroll;
