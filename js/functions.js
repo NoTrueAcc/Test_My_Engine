@@ -121,7 +121,7 @@ $(document).ready(function() {
 		{
 			$('#chat_send textarea').val('');
 			var query = 'func=add_chat_message&text=' + encodeURIComponent(message);
-			ajax(query, error, updateChat)
+			ajax(query, errorChat, updateChat)
 		}
 	});
 
@@ -138,7 +138,7 @@ $(document).ready(function() {
 			{
 				$('#chat_send textarea').val('');
 				var query = 'func=add_chat_message&text=' + encodeURIComponent(message);
-				ajax(query, error, updateChat)
+				ajax(query, errorChat, updateChat)
 			}
 		}
 	});
@@ -221,6 +221,11 @@ function error()
 	alert('Произошла ошибка! Попробуйте позже.');
 }
 
+function errorChat()
+{
+
+}
+
 function successAddComment(data)
 {
 	data = data['r'];
@@ -282,7 +287,7 @@ function successDeleteComment(data)
 function updateChat()
 {
 	var query = 'func=update_chat';
-	ajax(query, error, updateChatMessages);
+	ajax(query, errorChat, updateChatMessages);
 }
 
 function updateChatMessages(data)
