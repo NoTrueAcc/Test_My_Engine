@@ -172,7 +172,7 @@ function getTemplateChatMessage(date, name, message, my_comment)
 		var my_comment = "chat_message";
 	}
 
-	var str = "<p class=\"" + my_comment + "\"><span>" + date + "</span><span> " + name + ": </span>" + message + "</p>";
+	var str = "<p class=\"" + my_comment + "\"><span>" + date + " <span>" + name + ":</span></span>" + message + "</p>";
 
 	return str;
 }

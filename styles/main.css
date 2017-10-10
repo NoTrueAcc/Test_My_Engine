@@ -678,13 +678,17 @@ footer{
 	color: #688e0a;
 }
 
-#user_chat #chat_messages p span:first-child {
+#user_chat #chat_messages p span {
 	color: #000066;
+	font-size: 70%;
+	display: block;
 }
 
-#user_chat #chat_messages p span:nth-child(2) {
+#user_chat #chat_messages p span span {
 	color: #976c05;
 	font-weight: bold;
+	font-size: 130%;
+	display: inline;
 }
 
 #user_chat #chat_messages p {
@@ -694,6 +698,7 @@ footer{
 #chat_messages p.chat_message, #chat_messages p.my_comment {
 	display: inline-block;
 	min-width: 275px;
+	max-width: 400px;
 	border: 1px solid black;
 	padding: 10px;
 	text-align: center;
