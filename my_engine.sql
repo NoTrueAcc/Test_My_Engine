@@ -361,3 +361,33 @@ INSERT INTO `xyz_users` (`id`, `login`, `email`, `password`, `name`, `avatar`, `
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
+
+
+--
+-- Table structure for table `xyz_smiles`
+--
+
+DROP TABLE IF EXISTS `xyz_smiles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `xyz_smiles` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `code` varchar(45) NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `img` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `code_UNIQUE` (`code`),
+  UNIQUE KEY `img_UNIQUE` (`img`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `xyz_smiles`
+--
+
+LOCK TABLES `xyz_smiles` WRITE;
+/*!40000 ALTER TABLE `xyz_smiles` DISABLE KEYS */;
+INSERT INTO `xyz_smiles` VALUES (1,':-))','Очень доволен','big_grin.png'),(2,':-)','Улыбается','happy.png'),(3,':-|','Грустный','dumbfounded.png'),(4,'8-P','Ржу','crazy.png'),(5,':-]','Озадачен','appalled.png'),(6,';-(','Недоволен','evil.png'),(7,':-o','Не причем','pipe.png'),(8,':sleep:','Сплю','sleep.png');
+/*!40000 ALTER TABLE `xyz_smiles` ENABLE KEYS */;
+UNLOCK TABLES;
