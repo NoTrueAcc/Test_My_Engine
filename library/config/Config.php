@@ -31,6 +31,7 @@ class Config
 	const DIR_IMG       = '/images/';
 	const DIR_ARTICLES  = '/images/articles/';
 	const DIR_AVATAR    = '/images/avatars/';
+	const DIR_SMILES   = '/images/smailes/';
 	const DIR_TMPL      = __DIR__ . '/../../templates/';
 	const DIR_EMAIL     = __DIR__ . '/../../templates/emails/';
 
