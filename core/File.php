@@ -121,7 +121,7 @@ class File
 		return file_exists($file);
 	}
 
-	public static function saveChatMessage($chatMessage, $name)
+	public static function saveChatMessage($chatMessage, $name, $userId)
 	{
 		$chatMessage = preg_replace('/ {2, }/i', ' ', $chatMessage);
 		$chatMessage = trim($chatMessage);
@@ -143,7 +143,7 @@ class File
 			$fp[$key] = preg_replace("/\\n$/i", '', $fp[$key]);
 		}
 
-		$newMessage = date('d-m-Y H:i:s', time()) . '\&/' . $name . '\&/' . htmlspecialchars($chatMessage);
+		$newMessage = date('d-m-Y H:i:s', time()) . '\&/' . $name . '\&/' . htmlspecialchars($chatMessage) . '\&/' . $userId;
 		$newMessage = str_replace(array("\r\n", "\r", "\n"), ' ', strip_tags($newMessage));
 
 		array_push($fp, $newMessage);
@@ -169,7 +169,8 @@ class File
 			$chatMessageDataList[$key] = array(
 				'date' => $chatMessageData[0],
 				'name' => $chatMessageData[1],
-				'message' => htmlspecialchars_decode($chatMessageData[2])
+				'message' => htmlspecialchars_decode($chatMessageData[2]),
+				'userId' => $chatMessageData[3]
 			);
 		}
 

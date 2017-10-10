@@ -653,7 +653,6 @@ footer{
 	display: inline-block;
 	padding: 3px 15px;
 	text-decoration: none;
-	text-align: left;
 	float: right;
 	height: 40px;
 }
@@ -675,6 +674,10 @@ footer{
 	margin: 7px 0;
 }
 
+#user_chat #chat_messages p {
+	color: #688e0a;
+}
+
 #user_chat #chat_messages p span:first-child {
 	color: #000066;
 }
@@ -686,6 +689,26 @@ footer{
 
 #user_chat #chat_messages p {
 	font-weight: bold;
+}
+
+#chat_messages p.chat_message, #chat_messages p.my_comment {
+	display: inline-block;
+	min-width: 275px;
+	border: 1px solid black;
+	padding: 10px;
+	text-align: center;
+}
+
+#chat_messages p.chat_message {
+	border-radius: 20px 20px 0 20px;
+	float: right;
+	background-color: #c0c0c1;
+}
+
+#chat_messages p.my_comment {
+	border-radius: 20px 20px 20px 0;
+	float: left;
+	background-color: whitesmoke;
 }
 
 div.page_message {

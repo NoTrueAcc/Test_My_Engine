@@ -197,7 +197,7 @@ class API
 
 		try
 		{
-			$chatMessageData = File::saveChatMessage($message, $this->authUser->name);
+			$chatMessageData = File::saveChatMessage($message, $this->authUser->name, $this->authUser->id);
 
 			return json_encode($chatMessageData);
 		}
@@ -212,6 +212,14 @@ class API
 		try
 		{
 			$chatMessageData = File::getChatMessages();
+
+			foreach ($chatMessageData as $key => $messageData)
+			{
+				$userId = $chatMessageData[$key]['userId'];
+				unset($chatMessageData[$key]['userId']);
+				$myComment = ($this->authUser->id == $userId);
+				$chatMessageData[$key] = array_merge($chatMessageData[$key], array('my_comment' => $myComment));
+			}
 
 			return json_encode($chatMessageData);
 		}

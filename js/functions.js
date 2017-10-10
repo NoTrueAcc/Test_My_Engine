@@ -2,6 +2,7 @@ var tmp_id = 0;
 var tmp_comment = null;
 
 $(document).ready(function() {
+	updateChat();
 	setInterval(updateChat, 3000);
 	$('#chat_messages').scrollTop(99999);
 
@@ -160,9 +161,18 @@ function getTemplateComment(id, name, avatar, text, date)
 	return str;
 }
 
-function getTemplateChatMessage(date, name, message)
+function getTemplateChatMessage(date, name, message, my_comment)
 {
-	var str = "<p class=\"chat_message\"><span>" + date + "</span><span> " + name + ": </span>" + message + "</p>";
+	if(my_comment)
+	{
+		var my_comment = "my_comment";
+	}
+	else
+	{
+		var my_comment = "chat_message";
+	}
+
+	var str = "<p class=\"" + my_comment + "\"><span>" + date + "</span><span> " + name + ": </span>" + message + "</p>";
 
 	return str;
 }
@@ -283,27 +293,12 @@ function updateChatMessages(data)
 	for(var i = 0; i < data.length; i++)
 	{
 		var lastMessage = $('#chat_messages p:last-child span:first-child').html();
-		var lastName = $('#chat_messages p:last-child span:last-child').html();
-		var lastColor = $('#chat_messages p:last-child').css('color');
 
 		if(!lastMessage || (data[i].date > lastMessage))
 		{
-			var newMessage = getTemplateChatMessage(data[i].date, data[i].name, data[i].message);
+			var newMessage = getTemplateChatMessage(data[i].date, data[i].name, data[i].message, data[i].my_comment);
 
 			$(newMessage).appendTo('#chat_messages');
-
-			if(!lastName)
-			{
-				$('#chat_messages p:last-child').css('color', '#BDBDBD');
-			}
-			else if((data[i].name != lastName.slice(0, -2).trim()))
-			{
-				$('#chat_messages p:last-child').css('color', '#660000');
-			}
-			else
-			{
-				$('#chat_messages p:last-child').css('color', lastColor);
-			}
 
 			$('#chat_messages').scrollTop(99999);
 		}
