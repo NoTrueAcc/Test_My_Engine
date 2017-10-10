@@ -39,11 +39,13 @@ class Config
 	const LAYOUT = 'main';
 
 	const FILE_MESSAGES = __DIR__ . '/../../text/messages.ini';
+	const FILE_CHAT = __DIR__ . '/../../text/chat.txt';
 
 	const FORMAT_DATE = 'd.m.Y H:i:s';
 
 	const COUNT_ARTICLES_ON_PAGE    = 3;
 	const COUNT_SHOW_PAGES          = 10;
+	const COUNT_SHOW_CHAT_MESSAGES  = 100;
 
 	const MIN_SEARCH_LEN = 3;
 	const LEN_SEARCH_RES = 255;
