@@ -46,7 +46,17 @@ class CommunicationController extends AbstractController
 		$header->meta('viewport', 'width=device-width', false);
 		$header->favicon = 'favicon.ico';
 		$header->css = array('/styles/main.css', '/styles/prettify.css');
-		$header->js = array('/js/jquery-1.10.2.min.js', '/js/functions.js', '/js/validator.js', '/js/prettify.js', '/js/main.js', '/js/chat.js');
+
+		if($this->authUser)
+		{
+			$js = array('/js/jquery-1.10.2.min.js', '/js/functions.js', '/js/validator.js', '/js/prettify.js', '/js/main.js', '/js/chat.js');
+		}
+		else
+		{
+			$js = array('/js/jquery-1.10.2.min.js', '/js/functions.js', '/js/validator.js', '/js/prettify.js', '/js/main.js');
+		}
+
+		$header->js = $js;
 
 		return $header;
 	}
