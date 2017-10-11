@@ -364,6 +364,23 @@ INSERT INTO `xyz_users` (`id`, `login`, `email`, `password`, `name`, `avatar`, `
 
 
 
+-- MySQL dump 10.13  Distrib 5.7.19, for Linux (x86_64)
+--
+-- Host: 127.0.0.1    Database: my_engine
+-- ------------------------------------------------------
+-- Server version	5.7.19-0ubuntu0.16.04.1
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
 --
 -- Table structure for table `xyz_smiles`
 --
@@ -379,7 +396,7 @@ CREATE TABLE `xyz_smiles` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `code_UNIQUE` (`code`),
   UNIQUE KEY `img_UNIQUE` (`img`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=49 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -388,6 +405,17 @@ CREATE TABLE `xyz_smiles` (
 
 LOCK TABLES `xyz_smiles` WRITE;
 /*!40000 ALTER TABLE `xyz_smiles` DISABLE KEYS */;
-INSERT INTO `xyz_smiles` VALUES (1,':-))','Очень доволен','big_grin.png'),(2,':-)','Улыбается','happy.png'),(3,':-|','Грустный','dumbfounded.png'),(4,'8-P','Ржу','crazy.png'),(5,':-]','Озадачен','appalled.png'),(6,';-(','Недоволен','evil.png'),(7,':-o','Не причем','pipe.png'),(8,':sleep:','Сплю','sleep.png');
+INSERT INTO `xyz_smiles` VALUES (9,':-|',':-|','1.png'),(10,':-))',':-))','2.png'),(11,':-?',':-?','3.png'),(12,'(^_^)/','(^_^)/','4.png'),(13,':-X',':-X','5.png'),(14,':-*',':-*','6.png'),(15,':-!',':-!','7.png'),(16,':-Y',':-Y','8.png'),(17,'*^_^*','*^_^*','9.png'),(18,':-)',':-)','10.png'),(19,':-I',':-I','11.png'),(20,'()^_^()','()^_^()','12.png'),(21,':\'\'-(',':\'\'-(','13.png'),(22,':-p',':-p','14.png'),(23,'(^_^;)','(^_^;)','15.png'),(24,'(*^.^*)','(*^.^*)','16.png'),(25,'(*^?^*)','(*^?^*)','17.png'),(26,'(о_О)','(о_О)','18.png'),(27,'(v_V)','(v_V)','19.png'),(28,'(d_D)','(d_D)','20.png'),(29,'(v_D)','(v_D)','21.png'),(30,'::happy::','::happy::','22.png'),(31,'(@_@)','(@_@)','23.png'),(32,'(^_^V)','(^_^V)','24.png'),(33,'(VoV)','(VoV)','25.png'),(34,'(VooV)','(VooV)','26.png'),(35,'(VoooV)','(VoooV)','27.png'),(36,':-]',':-]','28.png'),(37,'(G_G)','(G_G)','29.png'),(38,':-7',':-7','30.png'),(39,'(G_G_G)','(G_G_G)','31.png'),(40,'::please::','::please::','32.png'),(41,'(opo)','(opo)','33.png'),(42,'(o-o)','(o-o)','34.png'),(43,'(o_o)','(o_o)','35.png'),(44,'(:-<<)','(:-<<)','36.png'),(45,':->',':->','37.png'),(46,'::love::','::love::','38.png'),(47,'(^_^/)','(^_^/)','39.png'),(48,'(?v?)','(?v?)','40.png');
 /*!40000 ALTER TABLE `xyz_smiles` ENABLE KEYS */;
 UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2017-10-11 12:27:42
