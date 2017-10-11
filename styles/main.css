@@ -617,7 +617,7 @@ footer{
 
 #user_chat {
 	background-color: #bde1f0;
-	width: 600px;
+	max-width: 600px;
 	min-height: 500px;
 	margin: 0 auto;
 	border: 1px solid #2c567e;
@@ -634,10 +634,11 @@ footer{
 	border-top:2px solid #71980f;
 	font-size:90%;
 	margin: 0;
+	float: left;
 }
 
 #user_chat textarea {
-	width: 403px;
+	width: 465px;
 	resize: none;
 	border-radius: 8px 0 0 8px;
 	height: 26px;
@@ -652,8 +653,8 @@ footer{
 	display: inline-block;
 	padding: 3px 15px;
 	text-decoration: none;
-	float: right;
 	height: 40px;
+	float: left;
 }
 
 #user_chat #chat_send {
@@ -1531,6 +1532,17 @@ p.message {
 		margin-right: 0;
 	}
 
+	#chat_messages p.chat_message, #chat_messages p.my_comment {
+		min-width: 250px;
+	}
+
+	#user_chat textarea {
+		width: 193px;
+	}
+
+	#user_chat #send_message {
+		padding: 3px 0;
+	}
 }
 
 @media screen and (max-width: 600px) {
@@ -1604,6 +1616,13 @@ p.message {
 		margin-left: 8px;
 	}
 
+	#chat_messages p.chat_message, #chat_messages p.my_comment {
+		min-width: 150px;
+	}
+
+	#user_chat textarea {
+		width: 253px;
+	}
 }
 
 @media screen and (max-width: 568px) {
@@ -1636,6 +1655,13 @@ p.message {
 		width: 85px;
 	}
 
+	#chat_messages p.chat_message, #chat_messages p.my_comment {
+		min-width: 100px;
+	}
+
+	#user_chat textarea {
+		width: 160px;
+	}
 }
 
 @media screen and (max-width: 480px) {
@@ -1682,6 +1708,17 @@ p.message {
 		margin: 2px 0 2px 8px;
 	}
 
+	header #main_logo a{
+		display: none;
+	}
+
+	#chat_messages p.chat_message, #chat_messages p.my_comment {
+		min-width: 80px;
+	}
+
+	#user_chat textarea {
+		width: 90px;
+	}
 }
 
 @media screen and (max-width: 384px) {
@@ -1776,6 +1813,17 @@ p.message {
 		margin-left: -114px;
 	}
 
+	header #main_logo a{
+		display: none;
+	}
+
+	#chat_messages p.chat_message, #chat_messages p.my_comment {
+		min-width: 60px;
+	}
+
+	#user_chat textarea {
+		width: 70px;
+	}
 }
 
 @media screen and (max-width: 320px) {
@@ -1830,6 +1878,14 @@ p.message {
 
 	.article_info li:nth-child(5) {
 		margin-left: 8px;
+	}
+
+	header #main_logo a{
+		display: none;
+	}
+
+	#user_chat textarea {
+		width: 50px;
 	}
 
 }
@@ -1932,5 +1988,13 @@ div.more_articles {
 
 	.main .article_img {
 		width: 65px;
+	}
+
+	header #main_logo a{
+		display: none;
+	}
+
+	#chat_messages p.chat_message, #chat_messages p.my_comment {
+		min-width: 50px;
 	}
 }
