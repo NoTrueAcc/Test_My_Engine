@@ -11,9 +11,7 @@ namespace controllers;
 use core\File;
 use core\Url;
 use library\config\Config;
-use modules\Chat;
 use modules\Form;
-use objects\SmileDB;
 use objects\UserDB;
 
 class UserController extends AbstractController
@@ -161,24 +159,6 @@ class UserController extends AbstractController
 				'formEmail' => $formEmail),
 			'profile', array('avatar' => $this->authUser->avatar, 'maxSize' =>(Config::MAX_SIZE_AVATAR / KB_B))));
 	}
-
-	public function actionChat()
-    {
-        $this->title = "Чат пользователей";
-        $this->meta_desc = "Чат пользователей.";
-        $this->meta_key = "чат пользователей, чат";
-
-        $hornav = $this->getHornav();
-        $hornav->addData('Чат пользователей');
-
-        $chat = new Chat();
-        $chat->hornav = $hornav;
-		$chat->smiles = SmileDB::getAllSmiles();
-
-
-        $this->render($chat);
-
-    }
 
 	protected function access()
 	{
